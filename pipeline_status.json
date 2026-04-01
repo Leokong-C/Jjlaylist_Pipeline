@@ -1,0 +1,24 @@
+{
+  "updated_at": "2026-03-30",
+  "items": {
+    "generator": {"status": "done", "label": "generator.py", "desc": "FFmpeg 루프 렌더링"},
+    "thumbnail": {"status": "done", "label": "thumbnail_generator.py", "desc": "Pillow 썸네일 자동 생성"},
+    "metadata": {"status": "done", "label": "metadata.py", "desc": "제목 · 태그 · 설명 생성"},
+    "mixer": {"status": "done", "label": "mixer.py", "desc": "10곡 믹스 플레이리스트 MP4"},
+    "main": {"status": "done", "label": "main.py", "desc": "전체 파이프라인 오케스트레이터"},
+    "uploader": {"status": "done", "label": "uploader.py", "desc": "YouTube 예약 업로드 · 주 3회"},
+    "pond5": {"status": "done", "label": "pond5_metadata.json", "desc": "스톡뮤직 등록 패키지"},
+    "youtube": {"status": "done", "label": "YouTube", "desc": "64개 예약 업로드 완료"},
+    "shorts": {"status": "todo", "label": "YouTube Shorts", "desc": "shorts_generator.py 예정"},
+    "reels": {"status": "todo", "label": "Instagram Reels", "desc": "reels_exporter.py 예정"},
+    "blog": {"status": "todo", "label": "네이버 블로그", "desc": "blog_generator.py 예정"},
+    "shorts_gen": {"status": "soon", "label": "shorts_generator.py", "desc": "세로 58초 Shorts 자동 생성"},
+    "reels_exp": {"status": "soon", "label": "reels_exporter.py", "desc": "Buffer CSV 패키지 생성"},
+    "blog_gen": {"status": "soon", "label": "blog_generator.py", "desc": "네이버 포스팅 자동 작성"},
+    "pond5_reg": {"status": "mid", "label": "Pond5 등록", "desc": "이메일 인증 후 50곡 목표"},
+    "trailer": {"status": "mid", "label": "채널 트레일러", "desc": "Clipchamp 편집 후 업로드"},
+    "naver": {"status": "mid", "label": "네이버 블로그 1편", "desc": "파이프라인 구축 회고"},
+    "ypp": {"status": "later", "label": "YPP 달성", "desc": "구독 500명 · 시청 3,000시간"},
+    "monetize": {"status": "later", "label": "수익화 완성", "desc": "AdSense · Pond5 · 스폰서십"}
+  }
+}
