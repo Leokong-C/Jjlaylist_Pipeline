@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J_Jlaylist 자동화 파이프라인</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f14; color: #e0e0e0; min-height: 100vh; padding: 24px 16px; }
+  h1 { font-size: 18px; font-weight: 500; text-align: center; margin-bottom: 6px; color: #fff; }
+  .sub { font-size: 12px; text-align: center; color: #888; margin-bottom: 24px; }
+  .legend { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #aaa; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .layer { margin-bottom: 16px; }
+  .layer-label { font-size: 11px; color: #666; text-align: center; margin-bottom: 8px; letter-spacing: 0.05em; }
+  .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .node { border-radius: 10px; padding: 10px 14px; text-align: center; min-width: 140px; cursor: pointer; transition: transform 0.15s, opacity 0.15s; border: 1px solid transparent; text-decoration: none; display: block; }
+  .node:hover { transform: translateY(-2px); opacity: 0.85; }
+  .node .title { font-size: 13px; font-weight: 500; }
+  .node .desc { font-size: 11px; margin-top: 3px; opacity: 0.75; }
+  .purple { background: #2a1f4e; border-color: #534AB7; color: #AFA9EC; }
+  .purple .title { color: #CECBF6; }
+  .teal { background: #0d2e22; border-color: #0F6E56; color: #5DCAA5; }
+  .teal .title { color: #9FE1CB; }
+  .gray { background: #1e1e1e; border-color: #444441; color: #888780; }
+  .gray .title { color: #B4B2A9; }
+  .amber { background: #2e1f06; border-color: #854F0B; color: #EF9F27; }
+  .amber .title { color: #FAC775; }
+  .coral { background: #2e1008; border-color: #993C1D; color: #F0997B; }
+  .coral .title { color: #F5C4B3; }
+  .red { background: #2e0a0a; border-color: #A32D2D; color: #F09595; }
+  .red .title { color: #F7C1C1; }
+  .arrow-row { text-align: center; color: #444; font-size: 16px; margin: 4px 0; }
+  .divider { border: none; border-top: 1px dashed #2a2a2a; margin: 20px 0 16px; }
+  .section-title { font-size: 11px; color: #555; text-align: center; margin-bottom: 12px; letter-spacing: 0.08em; }
+  .badge-done { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; background: #0d2e22; color: #5DCAA5; border: 1px solid #0F6E56; margin-left: 6px; vertical-align: middle; }
+  .badge-todo { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; background: #2e1f06; color: #EF9F27; border: 1px solid #854F0B; margin-left: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+ 
+<h1>J_Jlaylist 자동화 파이프라인</h1>
+<p class="sub">Suno · Claude · FFmpeg · YouTube 완전 자동화 구조도</p>
+ 
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#534AB7"></div>입력</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#0F6E56"></div>완료</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#444441"></div>미완성</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#854F0B"></div>단기 예정</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#993C1D"></div>중기 예정</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#A32D2D"></div>장기 목표</div>
+</div>
+ 
+<div class="layer">
+  <div class="layer-label">입력 소스</div>
+  <div class="row">
+    <a class="node purple" href="https://suno.com" target="_blank">
+      <div class="title">Suno Pro</div>
+      <div class="desc">월 250크레딧 · MP3 생성</div>
+    </a>
+    <a class="node purple" href="#" target="_blank">
+      <div class="title">썸네일 이미지</div>
+      <div class="desc">assets/thumbnails/</div>
+    </a>
+    <a class="node purple" href="https://console.anthropic.com" target="_blank">
+      <div class="title">Claude API</div>
+      <div class="desc">.env 키 관리</div>
+    </a>
+  </div>
+</div>
+ 
+<div class="arrow-row">↓</div>
+ 
+<div class="layer">
+  <div class="layer-label">처리 모듈 <span class="badge-done">완료</span></div>
+  <div class="row">
+    <div class="node teal">
+      <div class="title">generator.py</div>
+      <div class="desc">FFmpeg 루프 렌더링</div>
+    </div>
+    <div class="node teal">
+      <div class="title">thumbnail_generator.py</div>
+      <div class="desc">Pillow 썸네일 자동 생성</div>
+    </div>
+    <div class="node teal">
+      <div class="title">metadata.py</div>
+      <div class="desc">제목 · 태그 · 설명 생성</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="arrow-row">↓</div>
+ 
+<div class="layer">
+  <div class="layer-label">통합 <span class="badge-done">완료</span></div>
+  <div class="row">
+    <div class="node teal">
+      <div class="title">mixer.py</div>
+      <div class="desc">10곡 믹스 플레이리스트 MP4</div>
+    </div>
+    <div class="node teal">
+      <div class="title">main.py</div>
+      <div class="desc">전체 파이프라인 오케스트레이터</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="arrow-row">↓</div>
+ 
+<div class="layer">
+  <div class="layer-label">배포 <span class="badge-done">완료</span></div>
+  <div class="row">
+    <div class="node teal">
+      <div class="title">uploader.py</div>
+      <div class="desc">YouTube 예약 업로드 · 주 3회</div>
+    </div>
+    <div class="node teal">
+      <div class="title">pond5_metadata.json</div>
+      <div class="desc">스톡뮤직 등록 패키지</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="arrow-row">↓</div>
+ 
+<div class="layer">
+  <div class="layer-label">결과물</div>
+  <div class="row">
+    <a class="node teal" href="https://youtube.com/@J_Jlaylist" target="_blank">
+      <div class="title">YouTube</div>
+      <div class="desc">64개 예약 업로드 완료</div>
+    </a>
+    <div class="node gray">
+      <div class="title">YouTube Shorts</div>
+      <div class="desc">shorts_generator.py 예정</div>
+    </div>
+    <div class="node gray">
+      <div class="title">Instagram Reels</div>
+      <div class="desc">reels_exporter.py 예정</div>
+    </div>
+    <div class="node gray">
+      <div class="title">네이버 블로그</div>
+      <div class="desc">blog_generator.py 예정</div>
+    </div>
+  </div>
+</div>
+ 
+<hr class="divider">
+<div class="section-title">남은 단계</div>
+ 
+<div class="layer">
+  <div class="layer-label">단기 · 이번 주 <span class="badge-todo">진행 예정</span></div>
+  <div class="row">
+    <div class="node amber">
+      <div class="title">shorts_generator.py</div>
+      <div class="desc">세로 58초 Shorts 자동 생성</div>
+    </div>
+    <div class="node amber">
+      <div class="title">reels_exporter.py</div>
+      <div class="desc">Buffer CSV 패키지 생성</div>
+    </div>
+    <div class="node amber">
+      <div class="title">blog_generator.py</div>
+      <div class="desc">네이버 포스팅 자동 작성</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="layer" style="margin-top:12px">
+  <div class="layer-label">중기 · 1~2개월</div>
+  <div class="row">
+    <a class="node coral" href="https://pond5.com" target="_blank">
+      <div class="title">Pond5 등록</div>
+      <div class="desc">이메일 인증 후 50곡 목표</div>
+    </a>
+    <div class="node coral">
+      <div class="title">채널 트레일러</div>
+      <div class="desc">Clipchamp 편집 후 업로드</div>
+    </div>
+    <div class="node coral">
+      <div class="title">네이버 블로그 1편</div>
+      <div class="desc">파이프라인 구축 회고</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="layer" style="margin-top:12px">
+  <div class="layer-label">장기 · 3~9개월</div>
+  <div class="row">
+    <div class="node red">
+      <div class="title">YPP 달성</div>
+      <d
