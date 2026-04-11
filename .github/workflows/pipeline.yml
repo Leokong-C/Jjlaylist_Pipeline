@@ -1,0 +1,128 @@
+name: J_Jlaylist Auto Pipeline
+
+# ──────────────────────────────────────────────
+# 트리거: music/ 폴더에 MP3 push 시 자동 실행
+#         또는 GitHub Actions 탭에서 수동 실행
+# ──────────────────────────────────────────────
+on:
+  push:
+    paths:
+      - 'music/*.mp3'
+      - 'music/**/*.mp3'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: '실행 모드 (all / upload / mixer)'
+        required: false
+        default: 'all'
+      mood:
+        description: '테마 (all / night / cafe / melancholy / dawn)'
+        required: false
+        default: 'all'
+      count:
+        description: '테마당 생성 수'
+        required: false
+        default: '1'
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    steps:
+      # ── 1. 코드 체크아웃 ─────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Python 3.11 세팅 (Actions에서 3.14 미지원) ───────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ── 3. 의존성 설치 ───────────────────────────────────────────────
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install \
+            google-api-python-client \
+            google-auth-oauthlib \
+            google-auth-httplib2 \
+            google-auth \
+            anthropic \
+            pillow \
+            requests
+
+      # ── 4. FFmpeg 설치 ───────────────────────────────────────────────
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+
+      # ── 5. YouTube OAuth token.pickle 복원 ──────────────────────────
+      - name: Restore YouTube token.pickle
+        run: |
+          echo "${{ secrets.TOKEN_PICKLE_B64 }}" | base64 -d > token.pickle
+          echo "✅ token.pickle 복원 완료"
+
+      # ── 6. 출력 디렉토리 생성 ────────────────────────────────────────
+      - name: Create output directories
+        run: |
+          mkdir -p output/mixes output/shorts output/reels \
+                   output/blog_posts output/thumbnails \
+                   music/processed assets/backgrounds assets/thumbnails
+
+      # ── 7. 메인 파이프라인 실행 ──────────────────────────────────────
+      - name: Run J_Jlaylist Pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PIPELINE_MODE: ${{ github.event.inputs.mode || 'all' }}
+          PIPELINE_MOOD: ${{ github.event.inputs.mood || 'all' }}
+          PIPELINE_COUNT: ${{ github.event.inputs.count || '1' }}
+        run: |
+          python main.py \
+            --mode $PIPELINE_MODE \
+            --mood $PIPELINE_MOOD \
+            --count $PIPELINE_COUNT
+
+      # ── 8. Shorts 자동 생성 + 업로드 ────────────────────────────────
+      - name: Generate & Upload Shorts
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python shorts_generator.py || echo "⚠️ Shorts 생성 스킵"
+          python shorts_uploader.py  || echo "⚠️ Shorts 업로드 스킵"
+
+      # ── 9. Pond5 FTP 업로드 (하루 12곡 한도) ────────────────────────
+      - name: Upload to Pond5
+        env:
+          POND5_USER: ${{ secrets.POND5_USER }}
+          POND5_PASS: ${{ secrets.POND5_PASS }}
+        run: |
+          python pond5_uploader.py --limit 12 || echo "⚠️ Pond5 업로드 스킵"
+
+      # ── 10. GitHub Pages 파이프라인 상태 업데이트 ────────────────────
+      - name: Update pipeline status
+        run: |
+          python update_pipeline.py upload 완료
+          python update_pipeline.py shorts 완료
+
+      # ── 11. 처리된 MP3 커밋 (processed/ 이동 반영) ──────────────────
+      - name: Commit processed files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "[bot] 파이프라인 자동 처리 완료"
+          file_pattern: |
+            music/processed/**
+            mix_upload_log.json
+            batch_log.json
+            output/**
+
+      # ── 12. 실패 시 알림 (선택: Gmail 또는 Slack webhook 연동 가능) ──
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "❌ 파이프라인 실패! GitHub Actions 로그를 확인하세요."
+          echo "URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
