@@ -41,7 +41,7 @@ jobs:
           python-version: '3.11'
       # ── 3. 의존성 설치 ───────────────────────────────────────────────
       - name: Install Python dependencies
-        run: |
+        run: pip install -r requirements.txt
           pip install --upgrade pip
           pip install \
             google-api-python-client \
