@@ -94,6 +94,9 @@ jobs:
 
       # ── 10. GitHub Pages 파이프라인 상태 업데이트 ────────────────────
       - name: Update pipeline status
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
         run: |
           python update_pipeline.py upload 완료
           python update_pipeline.py shorts 완료

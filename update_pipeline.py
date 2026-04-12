@@ -20,7 +20,11 @@ HEADERS = {
 def get_current_status():
     """GitHub에서 현재 상태 가져오기"""
     res = requests.get(API_URL, headers=HEADERS)
+    if res.status_code != 200:
+        raise ValueError(f"GitHub API 오류: {res.status_code} - {res.text}")
     data = res.json()
+    if "content" not in data:
+        raise KeyError(f"'content' 키 없음. 응답: {data}")
     content = base64.b64decode(data["content"]).decode("utf-8")
     return json.loads(content), data["sha"]
 
