@@ -1,0 +1,100 @@
+name: Thumbnail v3 Daily Restore
+
+on:
+  schedule:
+    # 매일 19:00 KST = 10:00 UTC
+    - cron: '0 10 * * *'
+  workflow_dispatch:  # 수동 실행 버튼
+
+permissions:
+  contents: write   # progress.json git push 위해 필요
+
+jobs:
+  apply-thumbnails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pillow google-auth google-auth-oauthlib google-api-python-client
+
+      - name: Install Liberation Sans Bold (Impact-like)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-liberation fonts-dejavu
+
+      - name: Run thumbnail v3 restore
+        id: apply
+        env:
+          TOKEN_PICKLE_B64: ${{ secrets.TOKEN_PICKLE_B64 }}
+        run: |
+          python thumbnail_v3_restore.py --apply --auto --daily-limit 6 2>&1 | tee run_output.log
+          # 종료 코드 캡처
+          PYTHON_EXIT=${PIPESTATUS[0]}
+          echo "python_exit=$PYTHON_EXIT" >> $GITHUB_OUTPUT
+          # 종료 코드 0=성공, 2=rate limit (둘 다 워크플로우는 성공으로 처리)
+          if [ "$PYTHON_EXIT" = "1" ]; then
+            exit 1
+          fi
+
+      - name: Extract report for email
+        if: always()
+        id: report
+        run: |
+          # ::REPORT_START:: ~ ::REPORT_END:: 사이만 추출
+          awk '/::REPORT_START::/,/::REPORT_END::/' run_output.log \
+            | grep -v '::REPORT' > report.json || echo '{}' > report.json
+          cat report.json
+
+          # 종료 코드 라인 추출
+          RESULT=$(grep '::RESULT::' run_output.log | tail -1 | sed 's/::RESULT:://')
+          echo "result=$RESULT" >> $GITHUB_OUTPUT
+
+      - name: Commit progress
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add thumbnail_v3_progress.json thumbnail_v3_log.json thumbnails/backup_v51/*.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "chore: thumbnail v3 progress $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Send email notification
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[J_Jlaylist] 일일 썸네일 적용 보고 - ${{ steps.report.outputs.result }}"
+          to: ${{ secrets.MAIL_TO }}
+          from: J_Jlaylist Bot <${{ secrets.MAIL_USERNAME }}>
+          body: |
+            J_Jlaylist 일일 자동화 결과
+
+            상태: ${{ steps.report.outputs.result }}
+
+            상세 보고서:
+            ${{ steps.report.outputs.result == 'RATE_LIMIT' && 'YouTube rate limit 도달. 내일 자동 재시도.' || '' }}
+
+            전체 로그는 첨부 또는 GitHub Actions 페이지 확인.
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          attachments: run_output.log,report.json
