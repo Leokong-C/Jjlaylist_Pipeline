@@ -1,0 +1,4 @@
+thumbnails/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+thumbnails/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+thumbnails/**/*.png filter=lfs diff=lfs merge=lfs -text
+thumbnails/**/*.webp filter=lfs diff=lfs merge=lfs -text
