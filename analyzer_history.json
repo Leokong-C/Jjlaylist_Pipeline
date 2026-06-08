@@ -1,0 +1,26 @@
+[
+  {
+    "run_at": "2026-06-08T13:34:42.027002+00:00",
+    "period": "2026-06-01 ~ 2026-06-08",
+    "current_kpi": {
+      "views": 6,
+      "estimatedMinutesWatched": 6,
+      "averageViewDuration": 63,
+      "subscribersGained": 0,
+      "subscribersLost": 0
+    },
+    "previous_kpi": {
+      "views": 10,
+      "estimatedMinutesWatched": 47,
+      "averageViewDuration": 286,
+      "subscribersGained": 0,
+      "subscribersLost": 0
+    },
+    "opportunities_count": 3,
+    "issue_urls": [
+      "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/1",
+      "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/2",
+      "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/3"
+    ]
+  }
+]

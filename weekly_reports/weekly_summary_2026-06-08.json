@@ -1,0 +1,64 @@
+{
+  "period": "2026-06-01 ~ 2026-06-08",
+  "current_kpi": {
+    "views": 6,
+    "estimatedMinutesWatched": 6,
+    "averageViewDuration": 63,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 10,
+    "estimatedMinutesWatched": 47,
+    "averageViewDuration": 286,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "조회수는 40% 감소했으나 평균 시청 시간이 286초에서 63초로 급락한 것이 더 심각함. v3 썸네일 복원 효과가 아직 미미하고, 특히 모바일(3회) 대비 데스크탑(2회)에서 시청시간이 더 긴 패턴이 확인됨. 비 오는 날 컨셉 영상들이 상위를 차지하지만 실제 유지력은 낮아 초기 클릭 이후 이탈이 심각한 상황.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "평균 시청 시간이 전주 286초에서 63초로 78% 급락 - v3 썸네일 복원에도 불구하고 콘텐츠 유지력 저하"
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "비 오는 날 컨셉 최적화로 시청 유지율 개선",
+        "evidence": "상위 4개 영상 중 2개가 '비 오는 날' 시리즈이며, hhbn42HtMJU 영상은 1회 조회에도 227초 시청으로 평균의 3.6배 성과",
+        "action": "비 오는 날 컨셉으로 v3 썸네일 집중 제작 및 첫 3분 구간에 가장 몰입도 높은 트랙 배치",
+        "estimated_roi": "평균 시청시간 +150초, 주간 시청시간 +15분",
+        "execution_time": "2시간",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P1",
+        "title": "데스크탑 타겟 최적화로 시청시간 극대화",
+        "evidence": "데스크탑 2회 조회에서 5분 시청 vs 모바일 3회 조회에서 0분 시청 - 데스크탑 유저의 BGM 청취 패턴 강함",
+        "action": "30분+ 롱폼 콘텐츠를 PC/업무용 BGM으로 포지셔닝하여 제목에 '작업용', '집중용' 키워드 추가",
+        "estimated_roi": "데스크탑 조회 시 평균 시청시간 +300초",
+        "execution_time": "30분",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P2",
+        "title": "직접 유입 채널 강화로 검색 의존도 감소",
+        "evidence": "NO_LINK_OTHER에서 1회 조회로 3분 시청 달성 - 직접 유입 시 시청 품질이 가장 높음",
+        "action": "채널 아트에 북마크 유도 문구 추가, 커뮤니티 탭 활성화로 구독자 직접 유입 증대",
+        "estimated_roi": "직접 유입 +20%, 평균 시청시간 +100초",
+        "execution_time": "1시간",
+        "automatable": "N"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "평균 시청 시간 회복 (목표: 150초+)",
+      "데스크탑 디바이스 조회수 비중"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/1",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/2",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/3"
+  ]
+}
