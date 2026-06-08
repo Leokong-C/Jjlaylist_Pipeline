@@ -20,3 +20,9 @@ output/shorts/*.mp4
 music/*.mp3
 music/processed/
 assets/backgrounds/client_secret.json
+
+# API keys
+
+claude_api_key.txt
+
+*.api_key
