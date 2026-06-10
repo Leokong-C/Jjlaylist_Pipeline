@@ -1,0 +1,92 @@
+name: Metadata Daily Batch Update
+
+on:
+  schedule:
+    # 매일 12:00 KST = 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:  # 수동 실행 버튼
+
+permissions:
+  contents: write
+
+jobs:
+  metadata-update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install anthropic python-dotenv google-auth google-auth-oauthlib google-api-python-client
+
+      - name: Run metadata batch update
+        id: update
+        env:
+          TOKEN_PICKLE_B64: ${{ secrets.TOKEN_PICKLE_B64 }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python batch_update_metadata.py --apply --auto --daily-limit 20 2>&1 | tee metadata_update_output.log
+          PYTHON_EXIT=${PIPESTATUS[0]}
+          if [ "$PYTHON_EXIT" = "1" ]; then
+            exit 1
+          fi
+
+      - name: Extract report
+        if: always()
+        id: report
+        run: |
+          awk '/::REPORT_START::/,/::REPORT_END::/' metadata_update_output.log \
+            | grep -v '::REPORT' > metadata_report.json || echo '{}' > metadata_report.json
+          RESULT=$(grep '::RESULT::' metadata_update_output.log | tail -1 | sed 's/::RESULT:://')
+          echo "result=$RESULT" >> $GITHUB_OUTPUT
+          cat metadata_report.json
+
+      - name: Commit progress
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add metadata_progress.json metadata_update_log.json backup_metadata/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "chore: metadata batch update $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Send email notification
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[J_Jlaylist] 일일 메타데이터 업데이트 - ${{ steps.report.outputs.result }}"
+          to: ${{ secrets.MAIL_TO }}
+          from: J_Jlaylist Metadata Bot <${{ secrets.MAIL_USERNAME }}>
+          body: |
+            J_Jlaylist 일일 메타데이터 업데이트 결과
+
+            상태: ${{ steps.report.outputs.result }}
+
+            의미:
+            - SUCCESS::N : N개 영상 SEO 업데이트 완료
+            - ALL_DONE   : 모든 영상 적용 완료 (워크플로우 비활성화 검토)
+            - FAIL       : 시스템 오류. 로그 확인 필요.
+
+            전체 로그는 첨부 또는 GitHub Actions 페이지에서 확인.
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          attachments: metadata_update_output.log,metadata_report.json
