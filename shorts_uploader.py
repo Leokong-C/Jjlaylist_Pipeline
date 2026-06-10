@@ -94,7 +94,7 @@ def find_shorts_to_upload(batch_num: int | None) -> list[Path]:
         for v in log.values()
         if isinstance(v, dict) and v.get("shorts_video_id")
     }
-
+    
     if batch_num is not None:
         patterns = [f"#{batch_num:02d}", f"#{batch_num}", f"_{batch_num:02d}"]
         all_files = [f for f in all_files if any(p in f.name for p in patterns)]

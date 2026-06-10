@@ -62,10 +62,10 @@ def find_mix_files(batch_num: int | None = None) -> list[Path]:
 
     # 2순위: #03, #3, 03 숫자 패턴 매칭
     patterns = [
-        f"#{batch_num:02d}",   # #03
-        f"#{batch_num}",       # #3
-        f" {batch_num:02d}",   # 공백+03
-        f"_{batch_num:02d}",   # _03
+        f"#{batch_num:02d} ",   # #03 (공백 포함)
+        f"#{batch_num:02d}.",   # #03. (점 포함)
+        f"#{batch_num:02d}_",   # #03_
+        f"MIX #{batch_num:02d}",  # MIX #03
     ]
     matched = [
         f for f in all_files
@@ -93,16 +93,7 @@ def already_generated(mix_path: Path) -> bool:
     return out_path.exists()
 
 # ── FFmpeg: 세로 변환 ──────────────────────────────────────────────────────────
-def make_shorts_clip(mix_path: Path, force: bool = False) -> Path | None:
-    """
-    [변환 로직]
-    1. START_OFFSET초 지점부터 SHORTS_DURATION초 추출
-    2. 영상: 가로 → crop 정사각형 → pad 1080x1920 (위아래 블러 배경)
-       - 블러 배경: 원본을 1080x1920으로 scale 후 boxblur
-       - 원본: 세로 중앙 정렬 오버레이
-    3. 오디오: 페이드인 1초 / 페이드아웃 1초
-    4. faststart (웹 스트리밍 최적화)
-    """
+def make_shorts_clip(mix_path: Path, force: bool = False, thumb_path: Path = None) -> Path | None:
     SHORTS_DIR.mkdir(parents=True, exist_ok=True)
     stem     = mix_path.stem
     out_path = SHORTS_DIR / f"{stem}_shorts.mp4"
@@ -113,80 +104,129 @@ def make_shorts_clip(mix_path: Path, force: bool = False) -> Path | None:
 
     print(f"  [변환] {mix_path.name}  →  {out_path.name}")
 
-    # ── 원본 영상 정보 확인 ──────────────────────────────────────────────────
-    probe_cmd = [
-        "ffprobe", "-v", "quiet",
-        "-print_format", "json",
-        "-show_streams",
-        str(mix_path)
-    ]
     try:
-        probe_result = subprocess.run(
-            probe_cmd, capture_output=True,
-            encoding="utf-8", errors="ignore"
-        )
+        probe_cmd = ["ffprobe", "-v", "quiet", "-print_format", "json",
+                     "-show_streams", str(mix_path)]
+        probe_result = subprocess.run(probe_cmd, capture_output=True,
+                                      encoding="utf-8", errors="ignore")
         probe_data = json.loads(probe_result.stdout)
         video_stream = next(
-            (s for s in probe_data.get("streams", []) if s["codec_type"] == "video"),
-            None
-        )
-        if video_stream:
-            src_w = int(video_stream.get("width", 1920))
-            src_h = int(video_stream.get("height", 1080))
-        else:
-            src_w, src_h = 1920, 1080
+            (s for s in probe_data.get("streams", []) if s["codec_type"] == "video"), None)
+        src_w = int(video_stream.get("width", 1920)) if video_stream else 1920
+        src_h = int(video_stream.get("height", 1080)) if video_stream else 1080
     except Exception:
         src_w, src_h = 1920, 1080
 
-    # ── FFmpeg 필터 그래프 ───────────────────────────────────────────────────
-    # [0:v] 두 갈래:
-    #   bg  : scale to 1080x1920 → boxblur (배경)
-    #   fg  : scale to fit height=1080 (가로 유지) → 중앙 overlay
-    fg_h = min(SHORTS_H, int(SHORTS_W * src_h / src_w))  # 원본 비율 유지, 너비 1080
+    fg_h = min(SHORTS_H, int(SHORTS_W * src_h / src_w))
     fg_w = SHORTS_W
-
-    vf = (
-        f"[0:v]split=2[bg_src][fg_src];"
-        f"[bg_src]scale={SHORTS_W}:{SHORTS_H}:force_original_aspect_ratio=increase,"
-        f"crop={SHORTS_W}:{SHORTS_H},boxblur=20:5[bg];"
-        f"[fg_src]scale={fg_w}:{fg_h}[fg];"
-        f"[bg][fg]overlay=(W-w)/2:(H-h)/2[vout]"
-    )
-
     fade_out_start = SHORTS_DURATION - FADE_DURATION
-    af = (
-        f"afade=t=in:st=0:d={FADE_DURATION},"
-        f"afade=t=out:st={fade_out_start}:d={FADE_DURATION}"
-    )
 
-    cmd = [
-        "ffmpeg", "-y",
-        "-ss", str(START_OFFSET),           # 입력 seek (빠름)
-        "-i", str(mix_path),
-        "-t", str(SHORTS_DURATION),
-        "-filter_complex", vf,
-        "-map", "[vout]",
-        "-map", "0:a",
-        "-af", af,
-        "-c:v", "libx264",
-        "-preset", "fast",
-        "-crf", "23",
-        "-c:a", "aac",
-        "-b:a", "192k",
-        "-r", "30",
-        "-s", f"{SHORTS_W}x{SHORTS_H}",
-        "-movflags", "+faststart",
-        str(out_path)
-    ]
+    # 썸네일 있으면 앞에 2초 붙이기
+    if thumb_path and thumb_path.exists():
+        temp_path = SHORTS_DIR / f"{stem}_shorts_temp.mp4"
 
-    result = subprocess.run(
-        cmd, capture_output=True,
-        encoding="utf-8", errors="ignore"
-    )
+        # Step 1: 메인 Shorts 클립 생성 (SHORTS_DURATION - 2초)
+        main_duration = SHORTS_DURATION - 2
+        fade_out_start_main = main_duration - FADE_DURATION
+        text_start = main_duration - 3
+        vf = (
+            f"[0:v]split=2[bg_src][fg_src];"
+            f"[bg_src]scale={SHORTS_W}:{SHORTS_H}:force_original_aspect_ratio=increase,"
+            f"crop={SHORTS_W}:{SHORTS_H},boxblur=20:5[bg];"
+            f"[fg_src]scale={fg_w}:{fg_h}[fg];"
+            f"[bg][fg]overlay=(W-w)/2:(H-h)/2,"
+            f"drawtext=text='🎵 Full 1Hour Mix':fontcolor=white:fontsize=52:x=(w-text_w)/2:y=h-220"
+            f":enable='gte(t,{text_start})',"
+            f"drawtext=text='Link in Comments':fontcolor=white:fontsize=40:x=(w-text_w)/2:y=h-155"
+            f":enable='gte(t,{text_start})',"
+            f"drawtext=text='J_Jlaylist':fontcolor=0xCCCCCC:fontsize=32:x=(w-text_w)/2:y=h-100"
+            f":enable='gte(t,{text_start})'[vout]"
+        )
+        af = (f"afade=t=in:st=0:d={FADE_DURATION},"
+              f"afade=t=out:st={fade_out_start_main}:d={FADE_DURATION}")
 
-    if result.returncode != 0:
-        print(f"  [ERROR] FFmpeg 실패:\n{result.stderr[-800:]}")
-        return None
+        cmd_main = [
+            "ffmpeg", "-y", "-ss", str(START_OFFSET),
+            "-i", str(mix_path), "-t", str(main_duration),
+            "-filter_complex", vf,
+            "-map", "[vout]", "-map", "0:a", "-af", af,
+            "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+            "-c:a", "aac", "-b:a", "192k", "-r", "30",
+            "-s", f"{SHORTS_W}x{SHORTS_H}", "-movflags", "+faststart",
+            str(temp_path)
+        ]
+        r = subprocess.run(cmd_main, capture_output=True, encoding="utf-8", errors="ignore")
+        if r.returncode != 0:
+            print(f"  [ERROR] 메인 클립 생성 실패:\n{r.stderr[-500:]}")
+            return None
+
+        # Step 2: 썸네일 → 2초 정지 클립 생성
+        thumb_clip = SHORTS_DIR / f"{stem}_thumb_clip.mp4"
+        cmd_thumb = [
+            "ffmpeg", "-y",
+            "-loop", "1", "-i", str(thumb_path),
+            "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+            "-t", "2",
+            "-vf", f"scale={SHORTS_W}:{SHORTS_H}:force_original_aspect_ratio=decrease,"
+                   f"pad={SHORTS_W}:{SHORTS_H}:(ow-iw)/2:(oh-ih)/2",
+            "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+            "-c:a", "aac", "-b:a", "192k", "-r", "30",
+            "-movflags", "+faststart",
+            str(thumb_clip)
+        ]
+        r = subprocess.run(cmd_thumb, capture_output=True, encoding="utf-8", errors="ignore")
+        if r.returncode != 0:
+            print(f"  [ERROR] 썸네일 클립 생성 실패:\n{r.stderr[-500:]}")
+            return None
+
+        # Step 3: 썸네일 클립 + 메인 클립 concat
+        concat_list = SHORTS_DIR / f"{stem}_concat.txt"
+        concat_list.write_text(
+            f"file '{thumb_clip.name}'\nfile '{temp_path.name}'\n",
+            encoding="utf-8"
+        )
+        cmd_concat = [
+            "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+            "-i", str(concat_list),
+            "-c", "copy", "-movflags", "+faststart",
+            str(out_path)
+        ]
+        r = subprocess.run(cmd_concat, capture_output=True, encoding="utf-8", errors="ignore")
+
+        # 임시 파일 삭제
+        for f in [temp_path, thumb_clip, concat_list]:
+            if f.exists():
+                f.unlink()
+
+        if r.returncode != 0:
+            print(f"  [ERROR] concat 실패:\n{r.stderr[-500:]}")
+            return None
+
+    else:
+        # 썸네일 없으면 기존 방식
+        vf = (
+            f"[0:v]split=2[bg_src][fg_src];"
+            f"[bg_src]scale={SHORTS_W}:{SHORTS_H}:force_original_aspect_ratio=increase,"
+            f"crop={SHORTS_W}:{SHORTS_H},boxblur=20:5[bg];"
+            f"[fg_src]scale={fg_w}:{fg_h}[fg];"
+            f"[bg][fg]overlay=(W-w)/2:(H-h)/2[vout]"
+        )
+        af = (f"afade=t=in:st=0:d={FADE_DURATION},"
+              f"afade=t=out:st={fade_out_start}:d={FADE_DURATION}")
+        cmd = [
+            "ffmpeg", "-y", "-ss", str(START_OFFSET),
+            "-i", str(mix_path), "-t", str(SHORTS_DURATION),
+            "-filter_complex", vf,
+            "-map", "[vout]", "-map", "0:a", "-af", af,
+            "-c:v", "libx264", "-preset", "fast", "-crf", "23",
+            "-c:a", "aac", "-b:a", "192k", "-r", "30",
+            "-s", f"{SHORTS_W}x{SHORTS_H}", "-movflags", "+faststart",
+            str(out_path)
+        ]
+        r = subprocess.run(cmd, capture_output=True, encoding="utf-8", errors="ignore")
+        if r.returncode != 0:
+            print(f"  [ERROR] FFmpeg 실패:\n{r.stderr[-800:]}")
+            return None
 
     size_mb = out_path.stat().st_size / 1_048_576
     print(f"  [OK] {out_path.name}  ({size_mb:.1f} MB)")
@@ -258,7 +298,16 @@ def main():
             skipped.append(mix)
             print(f"  [SKIP] Shorts 이미 존재 (--force로 덮어쓰기)")
             continue
-        out = make_shorts_clip(mix, force=args.force)
+
+        # 배치 번호로 썸네일 경로 연결
+        thumb = None
+        if args.batch is not None:
+            thumb_candidate = BASE_DIR / "thumbnails" / "output_v3" / f"thumb_v3_batch{args.batch}.jpg"
+            if thumb_candidate.exists():
+                thumb = thumb_candidate
+                print(f"  [THUMB] {thumb_candidate.name} 사용")
+
+        out = make_shorts_clip(mix, force=args.force, thumb_path=thumb)
         if out:
             success.append(out)
             # batch_log 업데이트 (배치 번호 지정된 경우)

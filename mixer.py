@@ -10,6 +10,7 @@ mixer.py  ·  J_Jlaylist
   python mixer.py --mood dawn        # 새벽·아침 테마
   python mixer.py --count 4         # 4개 연속
   python mixer.py --songs 8         # 곡 수 변경
+  python mixer.py --offset 30       # 각 트랙 앞 30초 스킵 (인트로 스킵)
 """
 
 import subprocess, os, json, random, re, argparse
@@ -32,6 +33,7 @@ FADE_IN_SEC    = 1.5
 FADE_OUT_SEC   = 4.0
 VIDEO_BITRATE  = "800k"
 AUDIO_BITRATE  = "192k"
+START_OFFSET   = 0   # 기본값: 스킵 없음 (main()에서 덮어씀)
 
 # ── 분위기 키워드 ─────────────────────────────────────────────────────────
 MOOD_KEYWORDS = {
@@ -59,7 +61,7 @@ MOOD_EMOJI = {
 }
 
 # ── 폴백 배경색 (썸네일 없을 때) ─────────────────────────────────────────
-FALLBACK_BG_COLOR = "0x0a0a1a"   # 짙은 네이비
+FALLBACK_BG_COLOR = "0x0a0a1a"
 
 
 def get_duration(mp3_path: str) -> float:
@@ -88,16 +90,26 @@ def select_songs(mood: str, n: int, used: set = None) -> list:
     else:
         pool = list(all_mp3)
         random.shuffle(pool)
-    return pool[:n]
+    seen_stems = set()
+    deduped = []
+    for f in pool:
+        stem = f.stem.replace(" (1)", "").replace("(1)", "").strip()
+        if stem not in seen_stems:
+            seen_stems.add(stem)
+            deduped.append(f)
+    return deduped[:n]
 
 
-def mix_audio_crossfade(songs: list, output_audio: Path) -> tuple:
+def mix_audio_crossfade(songs: list, output_audio: Path,
+                        start_offset: int = 0) -> tuple:
     """
     N개 MP3 → 크로스페이드 오디오
+    start_offset: 각 트랙 앞부분 스킵할 초 (인트로 스킵용)
     반환: (timestamps, total_sec)
     """
-    n         = len(songs)
-    durations = [get_duration(str(s)) for s in songs]
+    n        = len(songs)
+    raw_durs = [get_duration(str(s)) for s in songs]
+    durations = [max(0.0, d - start_offset) for d in raw_durs]
 
     # 타임스탬프 계산
     timestamps, cur = [], 0.0
@@ -111,46 +123,54 @@ def mix_audio_crossfade(songs: list, output_audio: Path) -> tuple:
     for s in songs:
         inputs += ["-i", str(s)]
 
+    # ── 오프셋 트림 필터 ──
+    def trim(idx):
+        if start_offset > 0:
+            return (f"[{idx}:a]atrim=start={start_offset},"
+                    f"asetpts=PTS-STARTPTS[a{idx}]")
+        return None
+
+    trim_parts = [trim(i) for i in range(n) if start_offset > 0]
+
+    def src(idx):
+        return f"[a{idx}]" if start_offset > 0 else f"[{idx}:a]"
+
     # ── filter_complex 구성 ──
     fade_out_start = max(0.0, total - FADE_OUT_SEC)
 
     if n == 1:
-        fc = (f"[0:a]afade=t=in:st=0:d={FADE_IN_SEC},"
-              f"afade=t=out:st={fade_out_start:.2f}:d={FADE_OUT_SEC}"
-              f"[aout]")
+        cf_parts = [
+            f"{src(0)}afade=t=in:st=0:d={FADE_IN_SEC},"
+            f"afade=t=out:st={fade_out_start:.2f}:d={FADE_OUT_SEC}[aout]"
+        ]
 
     elif n == 2:
-        # [0][1] → crossfade → [cf01] → fade in/out → [aout]
-        fc = (f"[0:a][1:a]acrossfade=d={CROSSFADE_SEC}:c1=tri:c2=tri[cf01];"
-              f"[cf01]afade=t=in:st=0:d={FADE_IN_SEC},"
-              f"afade=t=out:st={fade_out_start:.2f}:d={FADE_OUT_SEC}"
-              f"[aout]")
+        cf_parts = [
+            f"{src(0)}{src(1)}acrossfade=d={CROSSFADE_SEC}:c1=tri:c2=tri[cf01]",
+            f"[cf01]afade=t=in:st=0:d={FADE_IN_SEC},"
+            f"afade=t=out:st={fade_out_start:.2f}:d={FADE_OUT_SEC}[aout]"
+        ]
 
     else:
-        # n >= 3: [0][1]→[cf01], [cf01][2]→[cf012], ..., [cfXX]→fade→[aout]
-        parts = []
-        prev  = "cf01"
-        parts.append(
-            f"[0:a][1:a]acrossfade=d={CROSSFADE_SEC}:c1=tri:c2=tri[{prev}]"
+        cf_parts = []
+        prev = "cf01"
+        cf_parts.append(
+            f"{src(0)}{src(1)}acrossfade=d={CROSSFADE_SEC}:c1=tri:c2=tri[{prev}]"
         )
         for i in range(2, n):
-            cur_lbl = f"cf{''.join(str(x) for x in range(i+1))}"
-            # 라벨이 너무 길어지면 단순 인덱스로
             cur_lbl = f"cf{i:02d}"
-            parts.append(
-                f"[{prev}][{i}:a]"
-                f"acrossfade=d={CROSSFADE_SEC}:c1=tri:c2=tri"
-                f"[{cur_lbl}]"
+            cf_parts.append(
+                f"[{prev}]{src(i)}"
+                f"acrossfade=d={CROSSFADE_SEC}:c1=tri:c2=tri[{cur_lbl}]"
             )
             prev = cur_lbl
-
-        # 마지막 라벨에 페이드인/아웃
-        parts.append(
+        cf_parts.append(
             f"[{prev}]afade=t=in:st=0:d={FADE_IN_SEC},"
-            f"afade=t=out:st={fade_out_start:.2f}:d={FADE_OUT_SEC}"
-            f"[aout]"
+            f"afade=t=out:st={fade_out_start:.2f}:d={FADE_OUT_SEC}[aout]"
         )
-        fc = ";".join(parts)
+
+    all_parts = (trim_parts if trim_parts else []) + cf_parts
+    fc = ";".join(all_parts)
 
     cmd = (["ffmpeg"] + inputs +
            ["-filter_complex", fc,
@@ -159,7 +179,8 @@ def mix_audio_crossfade(songs: list, output_audio: Path) -> tuple:
             "-b:a", AUDIO_BITRATE,
             "-y", str(output_audio)])
 
-    print("  🎚  오디오 크로스페이드 믹싱 중...")
+    offset_msg = f" (각 트랙 앞 {start_offset}초 스킵)" if start_offset > 0 else ""
+    print(f"  🎚  오디오 크로스페이드 믹싱 중...{offset_msg}")
     r = subprocess.run(cmd, capture_output=True, text=True,
                        encoding="utf-8", errors="ignore")
     if r.returncode != 0:
@@ -169,16 +190,12 @@ def mix_audio_crossfade(songs: list, output_audio: Path) -> tuple:
 
 
 def render_video(audio: Path, thumb, out: Path, duration: float):
-    """
-    thumb: Path 또는 None (None이면 단색 배경으로 폴백)
-    """
     vf = ("scale=1920:1080:force_original_aspect_ratio=decrease,"
           "pad=1920:1080:(ow-iw)/2:(oh-ih)/2")
 
     if thumb and Path(thumb).exists():
         video_input = ["-loop", "1", "-i", str(thumb)]
     else:
-        # 썸네일 없을 때 단색 배경
         video_input = [
             "-f", "lavfi",
             "-i", f"color=c={FALLBACK_BG_COLOR}:size=1920x1080:rate=1"
@@ -217,7 +234,6 @@ def format_timestamps(timestamps: list) -> str:
 
 
 def pick_thumbnail(mood: str, seed: int):
-    """분위기 폴더에서 썸네일 선택. 없으면 None 반환."""
     rng    = random.Random(seed)
     exts   = ["*.png", "*.jpg", "*.jpeg"]
     thumbs = sorted([
@@ -243,12 +259,14 @@ def pick_thumbnail(mood: str, seed: int):
 
 
 def create_mix(mood: str = "all", songs_n: int = SONGS_PER_MIX,
-               mix_index: int = 1, used_songs: set = None) -> dict:
+               mix_index: int = 1, used_songs: set = None,
+               start_offset: int = 0) -> dict:
     if used_songs is None:
         used_songs = set()
 
     print(f"\n{'='*60}")
-    print(f"믹스 #{mix_index:02d} | 테마: {mood.upper()} | {songs_n}곡")
+    offset_info = f" | 인트로 {start_offset}초 스킵" if start_offset > 0 else ""
+    print(f"믹스 #{mix_index:02d} | 테마: {mood.upper()} | {songs_n}곡{offset_info}")
     print("=" * 60)
 
     songs = select_songs(mood, songs_n, used_songs)
@@ -261,7 +279,8 @@ def create_mix(mood: str = "all", songs_n: int = SONGS_PER_MIX,
         print(f"  {i:2d}. {clean}")
 
     temp_audio = TEMP_DIR / f"mix_{mix_index:02d}_{mood}.m4a"
-    timestamps, total_dur = mix_audio_crossfade(songs, temp_audio)
+    timestamps, total_dur = mix_audio_crossfade(songs, temp_audio,
+                                                start_offset=start_offset)
 
     thumb = pick_thumbnail(mood, seed=mix_index * 77)
     print(f"  🖼  썸네일: {thumb.name if thumb else '없음 (단색 폴백)'}")
@@ -310,13 +329,20 @@ def mix_tracks(music_folder="music/", thumbnail_path=None,
 
 
 def main():
+    global START_OFFSET
     p = argparse.ArgumentParser(description="J_Jlaylist 믹스 생성기")
-    p.add_argument("--mood",  default="all",
+    p.add_argument("--mood",   default="all",
                    choices=["night", "cafe", "melancholy", "dawn", "all"])
-    p.add_argument("--count", type=int, default=1)
-    p.add_argument("--songs", type=int, default=SONGS_PER_MIX)
-    p.add_argument("--start", type=int, default=1)
+    p.add_argument("--count",  type=int, default=1)
+    p.add_argument("--songs",  type=int, default=SONGS_PER_MIX)
+    p.add_argument("--start",  type=int, default=1)
+    p.add_argument("--offset", type=int, default=0,
+                   help="각 트랙 앞부분 스킵할 초 (기본값: 0, 권장: 30)")
     args = p.parse_args()
+
+    START_OFFSET = args.offset
+    if START_OFFSET > 0:
+        print(f"⏩ 인트로 스킵 모드: 각 트랙 앞 {START_OFFSET}초 건너뜀")
 
     if args.mood == "all" and args.count > 1:
         moods = (["night", "cafe", "melancholy", "dawn"] * args.count)[:args.count]
@@ -328,7 +354,8 @@ def main():
         idx = args.start + i
         try:
             r = create_mix(mood=mood, songs_n=args.songs,
-                           mix_index=idx, used_songs=used)
+                           mix_index=idx, used_songs=used,
+                           start_offset=START_OFFSET)
             results.append(r)
         except Exception as e:
             print(f"❌ 믹스 #{idx} 실패: {e}")
