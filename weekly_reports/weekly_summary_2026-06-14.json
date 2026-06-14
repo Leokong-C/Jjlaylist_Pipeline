@@ -1,0 +1,68 @@
+{
+  "period": "2026-06-07 ~ 2026-06-14",
+  "current_kpi": {
+    "views": 0,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 0,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 11,
+    "estimatedMinutesWatched": 37,
+    "averageViewDuration": 202,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "심각한 데이터 수집 오류 또는 시스템 장애가 발생했습니다. 모든 핵심 KPI가 0으로 표시되어 실제 채널 성과를 측정할 수 없는 상황입니다. 이전 주 11조회수, 37분 시청시간이 완전히 사라진 것은 데이터 연동 문제일 가능성이 높습니다. v3 썸네일 복원 효과를 평가할 수 없는 치명적인 상황입니다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "YouTube Analytics 연동 완전 중단 - 모든 KPI가 0으로 표시되어 채널 성과 측정 불가능"
+      },
+      {
+        "severity": "high",
+        "description": "v3 썸네일 효과 측정 불가 - CTR 개선 여부를 확인할 수 없어 최적화 전략 수정 시점을 놓칠 위험"
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "YouTube Analytics 연동 즉시 복구",
+        "evidence": "전체 KPI가 0으로 표시되어 데이터 수집 시스템 장애 확실",
+        "action": "YouTube Data API 연결 상태 확인, 권한 재설정, 대시보드 데이터 소스 점검",
+        "estimated_roi": "데이터 기반 의사결정 복구로 최적화 효과 +200%",
+        "execution_time": "30분",
+        "automatable": "N"
+      },
+      {
+        "priority": "P0",
+        "title": "수동 성과 데이터 백업 수집",
+        "evidence": "v3 썸네일 적용 D+7일차 데이터 손실로 중요한 A/B 테스트 결과 유실",
+        "action": "YouTube Studio에서 6/7-6/14 구간 CTR, 노출수, 시청시간 수동 추출 및 기록",
+        "estimated_roi": "썸네일 최적화 방향성 확보로 향후 CTR +0.3%p 가능",
+        "execution_time": "15분",
+        "automatable": "N"
+      },
+      {
+        "priority": "P1",
+        "title": "데이터 수집 백업 시스템 구축",
+        "evidence": "현재 단일 연동 방식으로 인한 데이터 손실 리스크 노출",
+        "action": "YouTube Studio 수동 체크와 API 자동 수집 이중화 체계 구축",
+        "estimated_roi": "데이터 안정성 확보로 지속적 최적화 가능, 월 성장률 +15%",
+        "execution_time": "2시간",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "데이터 수집 시스템 정상 작동 여부",
+      "v3 썸네일 CTR 개선 정도"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/4",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/5",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/6"
+  ]
+}
