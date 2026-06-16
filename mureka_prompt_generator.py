@@ -119,7 +119,7 @@ Requirements:
 - Return exactly {count} items in the JSON array"""
 
     response = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=4000,
         messages=[{"role": "user", "content": user_prompt}],
         system=system_prompt,

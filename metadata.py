@@ -68,7 +68,7 @@ BPM: {bpm or '알 수 없음'}
 """
     
     message = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=1000,
         messages=[
             {"role": "user", "content": user_prompt}
@@ -162,7 +162,7 @@ Respond ONLY with this exact JSON, no other text:
 """
     
     message = client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-6",
         max_tokens=500,
         messages=[{"role": "user", "content": prompt}],
         system="You are a stock music metadata expert. Respond only with valid JSON, no markdown, no explanation."
