@@ -1,0 +1,68 @@
+{
+  "period": "2026-06-28 ~ 2026-07-05",
+  "current_kpi": {
+    "views": 7,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 5,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 3,
+    "estimatedMinutesWatched": 18,
+    "averageViewDuration": 369,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "이번 주 조회수는 7회로 전주 3회 대비 133% 증가했으나, 시청시간이 전주 18분에서 0분(반올림 기준 극소)으로 사실상 붕괴된 상태입니다. 평균 시청 지속시간이 전주 369초(약 6분)에서 5초로 급락한 것은 유입은 늘었지만 시청자가 즉시 이탈하고 있음을 의미합니다. v3 썸네일 복원(6/7~) 이후 약 3주가 지난 시점임에도 CTR 회복이 아직 조회수 질적 향상으로 이어지지 않고 있으며, 롱폼 영상들의 평균 시청 지속시간이 2~13초에 불과해 첫 15초 훅이 작동하지 않는 심각한 구조적 문제가 확인됩니다. 검색(YT_SEARCH) 유입이 3회로 전체의 43%를 차지해 자연 검색 노출은 유지되고 있으나, 이를 시청시간으로 전환하는 데 실패하고 있는 것이 핵심 병목입니다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "롱폼 전체 평균 시청 지속시간 2~13초: 30분 이상 영상에서 시청자가 10초 이내 이탈하고 있어 YPP 3000시간 목표에 치명적입니다. 현재 속도(주 0분 수준)로는 수년 내 달성이 불가능하며, 영상 오프닝 구조(첫 15초) 또는 썸네일-제목과 실제 콘텐츠 간 기대 불일치가 원인일 가능성이 높습니다. 즉시 오프닝 후크 재검토 필요."
+      },
+      {
+        "severity": "medium",
+        "description": "Shorts 조회수 기여 전무에 가까움(1회): Shorts는 롱폼으로의 트래픽 유입 브릿지 역할을 기대했으나 현재 채널 유입(YT_CHANNEL 1회)과 Shorts 유입(1회)이 동일 수준으로, Shorts가 롱폼 시청시간 축적에 기여하지 못하고 있습니다. Shorts 말미 롱폼 CTA 또는 종료화면 연결 구조 점검이 필요합니다."
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "롱폼 오프닝 첫 15초 후크 재설계 — 시청 지속시간 0초 탈출",
+        "evidence": "롱폼 5개 영상의 평균 시청 지속시간이 2~13초로 전주 369초 대비 97% 이상 붕괴. 검색 유입 3회가 발생했음에도 시청시간이 0분으로 기록된 것은 콘텐츠 도입부에서 이탈이 집중됨을 강하게 시사합니다.",
+        "action": "최근 업로드된 롱폼 3편의 첫 15초를 분석하여 ①음악이 즉시 시작되는지, ②시각적 루프 애니메이션이 끊김 없이 재생되는지, ③썸네일 이미지와 동일한 비주얼로 시작되는지 확인. 미달 시 오프닝을 '음악+비주얼 즉시 시작(0초 인트로)' 구조로 교체하여 다음 신규 업로드부터 적용. 기존 영상은 YouTube Studio의 영상 편집기로 앞부분 트리밍 가능 여부 검토.",
+        "estimated_roi": "평균 시청 지속시간 15초→3분 회복 시 주간 시청시간 +0.5~2시간/주, 누적 3000시간 목표 달성 기간 단축",
+        "execution_time": "2~3시간 (분석 1시간 + 오프닝 재편집 1~2시간)",
+        "automatable": "N"
+      },
+      {
+        "priority": "P1",
+        "title": "검색 유입 키워드 집중 최적화 — 유일하게 작동하는 트래픽 소스 강화",
+        "evidence": "전체 7회 조회 중 YT_SEARCH가 3회(43%)로 최대 유입 소스. 채널 규모 대비 검색 유입 비율이 높다는 것은 키워드 수요가 존재함을 의미. 현재 제목에 '시티팝', 'City Pop', '#Citypop' 혼용 중이나 일관된 SEO 구조가 부재.",
+        "action": "YouTube 검색창에서 '시티팝', 'city pop mix', 'lofi city pop', '일본 시티팝 플레이리스트' 등 자동완성 키워드 10개 수집. 조회수 상위 영상(uA3kk8yePQw, vujiYUyBd5I)의 제목·설명·태그를 검색량 높은 키워드 기준으로 재작성. 설명란 첫 2줄에 핵심 키워드 포함, 태그 15개 이상 추가.",
+        "estimated_roi": "검색 유입 주 3회→10회 이상 증가 시 시청시간 전환율 개선과 맞물려 주간 시청시간 +3~8시간 기대",
+        "execution_time": "1~2시간",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P2",
+        "title": "Shorts→롱폼 브릿지 CTA 삽입 — 교차 시청 유도 구조 구축",
+        "evidence": "Shorts 유입 1회, EXT_URL 유입 1회가 존재하나 해당 유입이 롱폼 시청시간으로 전환된 흔적이 없음. 현재 모바일 조회 비중 57%(4/7)로 Shorts 소비층이 존재하며, BGM 청취 패턴(PC 49%, TV 11.5%)을 감안하면 Shorts에서 롱폼으로 유도하는 CTA가 시청시간 전환에 효과적일 수 있음.",
+        "action": "신규 Shorts 마지막 3~5초에 '전곡 듣기→채널 롱폼 링크' 텍스트 오버레이 및 종료화면 카드 연결 설정. Shorts 설명란에 관련 롱폼 URL 핀 댓글로 고정. 기존 Shorts(6Tthm32-20U 등)에도 댓글 핀 즉시 적용 가능.",
+        "estimated_roi": "Shorts 시청자 10% 롱폼 전환 시 주간 시청시간 +1~3시간/주 추가 기대",
+        "execution_time": "30분 (기존 영상 댓글 핀) + 신규 영상 편집 시 15분 추가",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "averageViewDuration (롱폼 평균 시청 지속시간): 현재 2~13초에서 60초 이상으로의 회복 여부 — 오프닝 후크 개선 효과의 직접 검증 지표",
+      "estimatedMinutesWatched (주간 총 시청시간): YPP 3000시간 목표 대비 실질 누적 속도 확인 — 이번 주 사실상 0분에서 탈출 여부가 채널 생존 분기점"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/13",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/14",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/15"
+  ]
+}
