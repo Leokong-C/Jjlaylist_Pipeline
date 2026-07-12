@@ -1,0 +1,68 @@
+{
+  "period": "2026-07-05 ~ 2026-07-12",
+  "current_kpi": {
+    "views": 3,
+    "estimatedMinutesWatched": 1,
+    "averageViewDuration": 53,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 15,
+    "estimatedMinutesWatched": 40,
+    "averageViewDuration": 186,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "이번 주(7/5~7/12) 조회수 3회, 시청시간 1분으로 전주(조회수 15회, 시청시간 40분) 대비 각각 -80%, -97.5% 급락했다. 단순 계절적 변동이 아닌 구조적 노출 감소로, 알고리즘 추천 트래픽이 사실상 0에 수렴한 것이 핵심 원인으로 보인다. 트래픽 전체가 PLAYLIST(2뷰)와 YT_SEARCH(1뷰)에만 집중되어 Browse/추천 피드 유입이 완전히 끊긴 상태다. 평균 시청 지속시간도 186초→53초로 -71% 하락, 롱폼 콘텐츠의 실질적 소비가 이루어지지 않고 있다. v3 썸네일 복원(6/7 시작) 후 한 달이 지났음에도 CTR 회복 신호가 데이터에 나타나지 않아, 노출 자체가 없거나 임프레션 대비 클릭이 여전히 저조한 국면이다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "Browse Features 및 추천(Suggested) 트래픽 소스가 데이터에 전혀 존재하지 않음. 전체 3뷰 중 Playlist 2뷰·Search 1뷰로 알고리즘 노출이 사실상 0 — 채널이 YouTube 추천 풀에서 이탈했을 가능성이 높으며, 이 상태가 지속되면 YPP 3,000시간 목표 달성이 현실적으로 불가능해짐. v3 썸네일 복원만으로는 임프레션 자체를 복구할 수 없어 추가 조치 필요."
+      },
+      {
+        "severity": "medium",
+        "description": "평균 시청 지속시간 53초(전주 186초 대비 -71%) — 이번 주 유입된 3명 모두 영상을 거의 시청하지 않고 이탈. 롱폼(30분+) 영상의 시청완료율이 극히 낮다는 신호로, 인트로 첫 15초 내 이탈이 집중되고 있을 가능성이 높음. BGM 채널임에도 초반 후킹 구간 부재 또는 썸네일-콘텐츠 간 기대 불일치가 원인일 수 있음."
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "신규 롱폼 영상 즉시 업로드로 알고리즘 활성화 신호 재점화",
+        "evidence": "이번 주 업로드 활동 데이터 없음 + Browse/Suggested 트래픽 0뷰. YouTube는 업로드 빈도와 최신성을 추천 알고리즘 신호로 사용하며, 채널 활동이 없을수록 노출 풀에서 밀려남. 현재 일일 6개 썸네일 자동화 적용 중이나 영상 업로드 자체가 없으면 노출 복구 불가.",
+        "action": "즉시 30~36분 시티팝 롱폼 영상 1편 업로드(기존 자동화 파이프라인 활용). 제목에 '2026 여름', '야간드라이브', '작업용BGM' 등 계절·상황 키워드 추가. 업로드 후 48시간 내 CTR과 임프레션 수치를 YouTube Studio에서 직접 확인하여 v3 썸네일 실효성 검증.",
+        "estimated_roi": "업로드 후 7일 내 임프레션 500+ 회복 시 Browse 트래픽 재유입 가능 → 시청시간 +15~30h/주 기대",
+        "execution_time": "2~4시간 (자동화 파이프라인 기준)",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P1",
+        "title": "YT_SEARCH 유입 1건 기반으로 검색 최적화 타이틀·태그 즉시 강화",
+        "evidence": "전체 트래픽 중 YT_SEARCH가 유일한 외부 유입(1뷰). Browse가 0인 상황에서 검색이 현재 채널의 유일한 자연 발견 경로임. 검색 유입 영상 제목('[Playlist]혼자인 밤에 어울리는 일본 시티팝')이 한국어 중심으로, 영어 검색량이 높은 'city pop mix', 'lofi japan', 'japanese city pop playlist 2026' 키워드 미활용 상태.",
+        "action": "기존 업로드 영상 상위 5편의 제목·설명·태그를 일괄 수정: 영어 검색 키워드(city pop mix, lofi japan, study music, japanese city pop 2026) + 한국어 키워드 병기 구조로 변경. 설명란 첫 2줄에 핵심 키워드 자연 삽입. 타임스탬프 추가로 검색 스니펫 노출 기회 확보.",
+        "estimated_roi": "검색 유입 주 1→10뷰 수준 회복 시 시청시간 +5~10h/주, 장기적으로 YPP 시청시간 누적 기여",
+        "execution_time": "3~5시간 (5편 일괄 수정 기준)",
+        "automatable": "N"
+      },
+      {
+        "priority": "P1",
+        "title": "인트로 후킹 구조 개선으로 평균 시청 지속시간 53초→5분+ 목표 설정",
+        "evidence": "평균 시청 지속시간 53초(롱폼 30분 기준 시청완료율 약 3%). BGM 채널 특성상 청취자는 틀어놓기 패턴이므로 첫 15~30초 내 이탈이 치명적. PC(49%)·TV(11.5%) 시청 비중이 높은 채널임에도 이번 주 디바이스가 MOBILE 100%로, 짧은 체류 후 이탈하는 캐주얼 뷰어만 유입된 정황.",
+        "action": "향후 업로드 영상의 인트로 구조 변경: ①첫 5초 내 BGM 즉시 시작(무음·로고 인트로 제거), ②15초 내 채널 정체성 자막 표시('작업할 때 틀어두는 시티팝'), ③영상 중간 챕터 마커 추가로 YouTube가 '긴 시청' 패턴을 인식하도록 유도. 기존 영상 중 조회수 상위 3편에 챕터 추가 즉시 적용.",
+        "estimated_roi": "AVD 53초→300초 개선 시 동일 조회수 기준 시청시간 6배 증가 → YPP 3,000시간 도달 기간 단축",
+        "execution_time": "1~2시간 (챕터 추가 기준), 신규 영상 구조 변경은 자동화 템플릿 수정 4시간",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "impressions(노출수) 및 CTR — Browse Features 트래픽 소스 재등장 여부로 알고리즘 추천 풀 복귀 확인. 목표: 임프레션 300+ / CTR 2.0% 이상",
+      "averageViewDuration(평균 시청 지속시간) — 인트로 개선 및 신규 업로드 후 53초→120초 이상 회복 여부로 콘텐츠-시청자 매칭 품질 측정"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/16",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/17",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/18"
+  ]
+}
