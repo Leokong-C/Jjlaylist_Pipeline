@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html><body style="font-family:-apple-system,'Segoe UI',sans-serif;color:#333;max-width:680px;margin:0 auto;padding:20px;">
+
+<h1 style="border-bottom:3px solid #0366d6;padding-bottom:8px;">
+  📊 J_Jlaylist 주간 분석
+</h1>
+<div style="color:#666;font-size:14px;margin-bottom:24px;">
+  기간: 2026-07-12 ~ 2026-07-19
+</div>
+
+<h2>🎯 핵심 KPI</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr style="background:#f5f5f5;">
+    <th style="padding:8px;text-align:left;">지표</th>
+    <th style="padding:8px;text-align:right;">현재</th>
+    <th style="padding:8px;text-align:right;">변화</th>
+  </tr>
+  <tr><td style="padding:8px;border-bottom:1px solid #eee;">조회수</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;">12</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;color:#388e3c">+200.0%</td></tr>
+  <tr><td style="padding:8px;border-bottom:1px solid #eee;">시청시간(분)</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;">1</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;color:#d32f2f">-90.9%</td></tr>
+  <tr><td style="padding:8px;">구독자 순증</td>
+      <td style="padding:8px;text-align:right;">+0</td>
+      <td style="padding:8px;text-align:right;">-</td></tr>
+</table>
+
+<h2 style="margin-top:32px;">📈 트렌드 진단</h2>
+<div style="background:#f0f7ff;padding:16px;border-radius:6px;line-height:1.6;">
+  이번 주 조회수는 12회로 전주(4회) 대비 3배 증가했으나, 이는 v3 썸네일 복원 초기 효과로 노출 기회가 늘어난 결과로 해석된다. 그러나 평균 시청 시간이 전주 224초에서 7초로 97% 급락한 것이 핵심 문제로, 조회수 반등이 실질적 시청 품질 개선으로 이어지지 않았음을 의미한다. 추정 시청 분수 역시 11분→1분으로 감소해 YPP 3000시간 목표 달성 속도는 오히려 후퇴했다. 트래픽 소스상 플레이리스트(5뷰)와 검색(4뷰)이 주요 유입원이나 모두 시청 분수 0으로 집계되어, 유입된 시청자가 실제 콘텐츠를 소비하지 않고 이탈하는 구조적 문제가 확인된다. 모바일 디바이스가 75%(9/12뷰)를 차지하는 반면 채널 시청자 패턴(PC 49%, TV 11.5%)과 괴리가 있어, 현재 유입되는 트래픽이 BGM 장기 청취를 목적으로 하는 핵심 타깃층이 아닐 가능성이 높다.
+</div>
+
+<h2 style="margin-top:32px;">🔥 발견된 기회 3건</h2>
+<div style="color:#666;font-size:13px;margin-bottom:8px;">CEO 컨펌 필요 — 각 안건의 GitHub Issue에서 승인/거부/수정</div>
+
+        <div style="border-left:4px solid #d32f2f;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#d32f2f;">[P0]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">즉시 이탈 원인 제거: 롱폼 인트로 첫 15초 구조 개편으로 AVD 회복</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> 전체 6개 롱폼 영상의 AVD가 5~14초 수준으로 집계되어 있으며, 30~43분 콘텐츠 기준 시청 완료율은 0.3~0.8%에 불과하다. BGM 채널 특성상 시청자는 음악이 즉시 시작되기를 기대하지만, 인트로 로고/타이틀 애니메이션이 첫 15초 이상을 차지할 경우 모바일 시청자는 즉시 이탈한다. 현재 모바일 비율 75%와 AVD 7초가 이를 뒷받침한다.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> 모든 신규 업로드 영상의 인트로를 음악 즉시 시작(0초) 구조로 변경하고, 타이틀/비주얼 오버레이는 3초 이내 페이드인으로 처리한다. 기존 상위 영상(DHFGIy6Yk3E 등) 중 조회수가 있는 영상은 인트로만 교체한 버전으로 재업로드를 검토한다.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> AVD 7초→120초 이상 회복 시 주간 추정 시청시간 +24분(현 12뷰 기준), 알고리즘 재추천 진입 시 노출 2~3배 증가로 시청시간 +5~10h/주 기대</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 신규 영상 템플릿 수정 30분, 기존 영상 재편집 영상당 20분 · 자동화: Y</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/19" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+        <div style="border-left:4px solid #f57c00;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#f57c00;">[P1]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">플레이리스트 트래픽 5뷰 집중 육성: 채널 내 큐레이션 플레이리스트 최적화</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> 이번 주 트래픽 소스 중 PLAYLIST가 5뷰(42%)로 1위를 차지했으나 시청 분수는 0으로 집계된다. 이는 외부 플레이리스트 또는 채널 자체 플레이리스트에서 유입되었지만 AVD 문제로 시청이 이루어지지 않았음을 의미한다. 플레이리스트 유입 자체는 BGM 채널에 가장 적합한 장기 시청 트래픽 소스로, 이 경로를 강화하면 시청시간 기여도가 가장 높다.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> 채널 내 테마별 플레이리스트(비 오는 밤/도쿄 야간/새벽 감성 등) 3~5개를 정비하고, 각 플레이리스트의 첫 영상을 AVD가 가장 높은 영상(현재 N1o5VLWHv94, AVD 14초 최고)으로 배치한다. 영상 엔드카드에 플레이리스트 연결 CTA를 표준화한다.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 플레이리스트 연속 재생 전환율 20% 달성 시 뷰당 평균 시청시간 30분 확보 가능, 주간 시청시간 +10~15h/주 기대</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 플레이리스트 정비 및 엔드카드 수정 2~3시간 · 자동화: N</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/20" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+        <div style="border-left:4px solid #1976d2;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#1976d2;">[P2]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">검색 유입 4뷰 키워드 집중 분석: '비 오는 밤 시티팝' 특화 SEO 강화</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> YT_SEARCH 4뷰(33%)가 두 번째 트래픽 소스이며, 상위 영상 중 비 관련 콘텐츠가 2편(hhbn42HtMJU, vujiYUyBd5I, N1o5VLWHv94) 포함되어 있다. 검색 유입은 의도 기반 트래픽으로 BGM 장기 청취 전환율이 높으나, 현재 AVD 문제로 전환이 차단된 상태다. 검색→시청 전환 구조를 정상화하면 가장 안정적인 시청시간 누적 경로가 된다.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> 비/야간/새벽 관련 영상 제목·태그·설명에 '비 오는 날 공부', '새벽 감성 시티팝', '잠들기 전 음악' 등 롱테일 검색어를 추가하고, YouTube Studio 검색어 리포트에서 실제 유입 키워드를 확인해 다음 업로드 제목에 반영한다.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 검색 유입 주간 4뷰→20뷰 성장 시, AVD 회복 전제 하에 시청시간 +10h/주 기대</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 키워드 리서치 및 메타데이터 수정 1~2시간, 이후 업로드 시 자동 적용 · 자동화: Y</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/21" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+
+<h3 style='color:#d32f2f;'>⚠️ 위험 신호</h3><ul><li><b>[high]</b> 평균 시청 시간 7초: 30분 이상 롱폼 콘텐츠에서 평균 7초 시청은 정상 이탈이 아닌 썸네일-콘텐츠 기대 불일치 또는 알고리즘 노출 품질 저하 신호다. 최상위 영상 DHFGIy6Yk3E도 7뷰에 추정 시청 분수 0으로, 사실상 클릭 후 즉시 이탈(Bounce)이 발생하고 있어 CTR 회복과 무관하게 AVD 기반 알고리즘 패널티 위험이 지속되고 있다.</li><li><b>[medium]</b> Shorts 성과 완전 소멸: 6Tthm32-20U(59초 Shorts)가 1뷰·시청분수 0·AVD 0초로 채널 유입 및 시청시간 기여가 전무하다. Shorts→롱폼 전환 깔때기가 작동하지 않는 상태로, YPP 시청시간 요건 달성에 Shorts가 기여하지 못하고 제작 자원만 소비하는 구조가 고착될 위험이 있다.</li></ul>
+
+<h2 style="margin-top:32px;">🌏 시청자 분포 (상위 5개국)</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+  <tr style="background:#f5f5f5;"><th style="padding:8px;text-align:left;">국가</th><th style="padding:8px;text-align:right;">조회수</th></tr>
+  
+</table>
+
+<h2 style="margin-top:32px;">📅 다음 주 측정 권장</h2>
+<div style="background:#fffde7;padding:12px;border-radius:6px;">
+  averageViewDuration (목표: 롱폼 기준 최소 60초 이상 회복 여부 — 인트로 개편 효과 검증의 핵심 지표), estimatedMinutesWatched from PLAYLIST source (플레이리스트 유입 시청시간 0분→양수 전환 여부 — YPP 3000시간 루트 개통 신호)
+</div>
+
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px;text-align:center;">
+  J_Jlaylist Weekly Analyzer v1 · 다음 보고: 일주일 후 일요일 09:00 KST<br>
+  전체 데이터는 첨부 JSON 또는 GitHub Actions 페이지에서 확인 가능
+</div>
+
+</body></html>
