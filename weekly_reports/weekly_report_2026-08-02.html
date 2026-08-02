@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html><body style="font-family:-apple-system,'Segoe UI',sans-serif;color:#333;max-width:680px;margin:0 auto;padding:20px;">
+
+<h1 style="border-bottom:3px solid #0366d6;padding-bottom:8px;">
+  📊 J_Jlaylist 주간 분석
+</h1>
+<div style="color:#666;font-size:14px;margin-bottom:24px;">
+  기간: 2026-07-26 ~ 2026-08-02
+</div>
+
+<h2>🎯 핵심 KPI</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr style="background:#f5f5f5;">
+    <th style="padding:8px;text-align:left;">지표</th>
+    <th style="padding:8px;text-align:right;">현재</th>
+    <th style="padding:8px;text-align:right;">변화</th>
+  </tr>
+  <tr><td style="padding:8px;border-bottom:1px solid #eee;">조회수</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;">4</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;color:#388e3c">+0.0%</td></tr>
+  <tr><td style="padding:8px;border-bottom:1px solid #eee;">시청시간(분)</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;">0</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;color:#d32f2f">-100.0%</td></tr>
+  <tr><td style="padding:8px;">구독자 순증</td>
+      <td style="padding:8px;text-align:right;">+0</td>
+      <td style="padding:8px;text-align:right;">-</td></tr>
+</table>
+
+<h2 style="margin-top:32px;">📈 트렌드 진단</h2>
+<div style="background:#f0f7ff;padding:16px;border-radius:6px;line-height:1.6;">
+  이번 주(7/26~8/2) 총 조회수 4회로 전주 동일 수준이나, 평균 시청 지속시간이 206초 → 4초로 98% 폭락한 것이 핵심 이슈입니다. 시청자가 영상을 클릭은 하지만 거의 즉시 이탈하고 있으며, 추정 시청시간도 13분 → 0분으로 사실상 0에 수렴했습니다. YPP 3,000시간 목표 대비 이번 주 기여도는 0시간으로, 채널 성장이 완전히 정체된 상태입니다. v3 썸네일 복원(6/7~) 이후에도 CTR 개선이 조회수 증가로 이어지지 않고 있으며, 트래픽 소스가 YT_SEARCH 2회 + EXT_URL 2회에 불과해 알고리즘 노출 자체가 극히 제한된 상황입니다. 구독자 증감은 0으로 채널 모멘텀이 사실상 소멸한 위기 국면입니다.
+</div>
+
+<h2 style="margin-top:32px;">🔥 발견된 기회 3건</h2>
+<div style="color:#666;font-size:13px;margin-bottom:8px;">CEO 컨펌 필요 — 각 안건의 GitHub Issue에서 승인/거부/수정</div>
+
+        <div style="border-left:4px solid #d32f2f;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#d32f2f;">[P0]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">롱폼 영상 인트로 5초 훅 긴급 교체 — 이탈률 붕괴 차단</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> 상위 3개 영상의 평균 시청 지속시간이 각각 1초, 12초, 2초로 전주 평균 206초 대비 98% 감소. 영상 길이(22~43분) 대비 시청 비율이 0.04~0.5%에 불과. 클릭은 발생(조회수 4회)하지만 즉시 이탈하는 패턴은 오디오 로딩 지연, 무음 인트로, 또는 기대와 다른 첫 5초가 원인일 가능성이 높음.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> 기존 업로드된 상위 3개 영상의 첫 5초를 확인하여 무음 구간·블랙 스크린·긴 인트로 로고 유무 점검. 즉시 재생되는 핵심 BGM 구간으로 시작하도록 영상 재편집 후 재업로드(또는 유튜브 에디터로 트리밍). 신규 업로드 영상부터는 0초~3초 이내 메인 멜로디가 시작되도록 자동화 파이프라인에 '인트로 컷 규칙' 추가.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 평균 시청 지속시간 4초 → 60초+ 회복 시, 주간 시청시간 +2~5시간 기대 (현재 베이스가 극히 낮아 소폭 회복만으로도 알고리즘 품질 점수 개선 가능)</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 영상 확인 30분 + 재편집/재업로드 1~2시간 (영상당) · 자동화: Y</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/25" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+        <div style="border-left:4px solid #f57c00;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#f57c00;">[P1]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">YT_SEARCH 유입 키워드 강화 — 검색 노출 확대로 실질 조회수 확보</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> 전체 트래픽 중 YT_SEARCH 2회(50%)가 발생 중이나 시청시간 기여는 0분. 검색 유입 자체는 존재하므로 키워드 매칭은 일부 작동 중. 상위 영상 제목에 '로파이', '시티팝', '카페', '비 오는 밤' 등 감성 키워드 포함되어 있으나, 경쟁 채널 대비 태그·설명란 최적화 여부 미확인. BGM 청취 수요(PC 49%, TV 11.5%)는 검색 기반 유입에 유리한 환경.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> 상위 3개 영상의 설명란에 '로파이 공부', '카페 브금', '잔잔한 일본 노래', '시티팝 플레이리스트 2026' 등 롱테일 키워드 15~20개 추가. 제목에 연도(2026) 또는 계절(여름/Summer) 태그 삽입 테스트. 신규 영상 업로드 시 설명란 SEO 템플릿을 자동화 파이프라인에 통합.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 검색 노출 +200~500% 시 주간 조회수 10~20회 → 시청시간 +3~8시간 추정 (키워드 경쟁도에 따라 변동)</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 영상당 설명란 수정 15~20분, 3개 영상 총 1시간 · 자동화: Y</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/26" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+        <div style="border-left:4px solid #1976d2;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#1976d2;">[P2]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">EXT_URL 유입 채널 품질 점검 — 외부 트래픽을 시청시간으로 전환</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> EXT_URL 유입 2회 발생했으나 시청시간 0분으로 외부 유입 품질이 매우 낮음. 외부 링크 공유 채널(커뮤니티, SNS, 블로그 등)의 방문자가 영상을 클릭 후 즉시 이탈하는 패턴. 현재 PC(50%)와 모바일(50%) 동일 분포로, 외부 유입이 모바일 중심일 경우 썸네일·제목이 모바일 화면에서 가독성 낮을 수 있음.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> EXT_URL 소스가 어느 플랫폼인지 YouTube 스튜디오 '트래픽 소스 세부정보'에서 확인. 해당 채널(예: 네이버 카페, 트위터, 디스코드 등)의 공유 방식 점검. 영상 링크 공유 시 '타임스탬프 0초 + 자동재생 파라미터(?autoplay=1)' 적용 및 공유 멘트에 '배경음악으로 틀어두세요' 등 시청 유도 문구 추가.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 외부 유입 시청 전환율 0% → 30% 개선 시, 현재 2회 기준 소폭이나 향후 외부 홍보 확대 시 시간당 +1~3시간 기여 가능</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 소스 확인 20분 + 공유 문구 템플릿 작성 30분 · 자동화: N</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/27" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+
+<h3 style='color:#d32f2f;'>⚠️ 위험 신호</h3><ul><li><b>[high]</b> 평균 시청 지속시간 206초 → 4초 (98% 붕괴): 상위 3개 영상 평균 지속시간이 1~12초로 전주 대비 사실상 제로 수준. 롱폼 BGM 특성상 최소 수분 이상 유지되어야 하나, 거의 즉시 이탈하고 있어 썸네일-제목 미스매치 또는 초반 5초 훅 결여가 의심됩니다. 이 상태 지속 시 알고리즘이 채널을 저품질로 분류할 위험이 있습니다.</li><li><b>[medium]</b> 추정 시청시간 13분 → 0분으로 YPP 3,000시간 누적 기여가 완전 중단: 현재 주간 기여 시간이 0에 가까운 상태가 지속되면 YPP 달성 기간이 무기한 연장됩니다. EXT_URL 유입 2회가 발생하고 있으나 시청시간 0분인 점은 외부 공유 채널(커뮤니티/SNS)의 트래픽 품질 자체도 낮음을 의미합니다.</li></ul>
+
+<h2 style="margin-top:32px;">🌏 시청자 분포 (상위 5개국)</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+  <tr style="background:#f5f5f5;"><th style="padding:8px;text-align:left;">국가</th><th style="padding:8px;text-align:right;">조회수</th></tr>
+  
+</table>
+
+<h2 style="margin-top:32px;">📅 다음 주 측정 권장</h2>
+<div style="background:#fffde7;padding:12px;border-radius:6px;">
+  평균 시청 지속시간(averageViewDuration): 현재 4초 → 최소 60초 이상 회복 여부 확인 (인트로 훅 개선 효과 검증 핵심 지표), 추정 시청시간(estimatedMinutesWatched): 0분 → 30분+ 회복 여부 추적 (YPP 3,000시간 누적 재개 여부 판단 기준)
+</div>
+
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px;text-align:center;">
+  J_Jlaylist Weekly Analyzer v1 · 다음 보고: 일주일 후 일요일 09:00 KST<br>
+  전체 데이터는 첨부 JSON 또는 GitHub Actions 페이지에서 확인 가능
+</div>
+
+</body></html>
