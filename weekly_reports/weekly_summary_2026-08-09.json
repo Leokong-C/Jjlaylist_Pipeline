@@ -1,0 +1,68 @@
+{
+  "period": "2026-08-02 ~ 2026-08-09",
+  "current_kpi": {
+    "views": 5,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 4,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 4,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 4,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "이번 주 조회수 5회(전주 4회 대비 +25%)로 미세 증가했으나, 추정 시청시간이 두 기간 모두 0분으로 집계되어 실질적 채널 성장은 사실상 정체 상태입니다. 상위 3개 영상 모두 Shorts(59초)이며 롱폼 조회수가 전무해, v3 썸네일 복원 효과가 롱폼에는 아직 전혀 발현되지 않고 있습니다. 트래픽 100%가 YT_SEARCH에서 유입되고 추천(Browse/Suggested) 유입이 0인 점은 알고리즘 노출이 완전히 끊긴 신호로, YPP 목표(3,000시청시간) 달성에 심각한 위협입니다. 디바이스는 모바일 80%로 BGM 청취 주력층인 PC(49%)·TV(11.5%)와 괴리가 있어, 현재 유입 경로 자체가 핵심 시청자층을 포획하지 못하고 있습니다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "롱폼 조회수 2주 연속 0회 — v3 썸네일 복원(6/7~) 이후 약 2개월이 경과했음에도 롱폼 트래픽 회복 징후가 전혀 없습니다. 알고리즘이 채널을 'Shorts 전용 채널'로 분류했을 가능성이 있으며, 이 상태가 지속되면 3,000시청시간 달성이 구조적으로 불가능합니다. 즉시 원인 진단 및 롱폼 특화 대응이 필요합니다."
+      },
+      {
+        "severity": "medium",
+        "description": "추천·탐색 트래픽 소스 완전 소실 — 이번 주 트래픽 소스가 YT_SEARCH 단일(100%)이며 'Browse Features(홈/추천)' 유입이 0입니다. Shorts 피드 노출조차 없다는 의미로, CTR 하락 여파로 인한 알고리즘 패널티가 아직 해소되지 않았을 수 있습니다."
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "롱폼 1편 긴급 수동 최적화 — 알고리즘 재진입 테스트",
+        "evidence": "롱폼 조회수 2주 0회, 시청시간 0분. YPP 기준 3,000시간 중 현재 누적분이 사실상 Shorts(0분 환산)에만 의존하는 상황. 롱폼 1편이라도 알고리즘에 포착되면 30분짜리 1회 완주 시 0.5시간 기여, 500회 재생 시 250시간 확보 가능.",
+        "action": "채널 내 누적 조회수 상위 롱폼 1편을 선정 → 제목에 핵심 검색어('city pop mix 2025', 'japanese lofi bgm') 재배치 → 설명란 첫 2줄에 타임스탬프+키워드 보강 → 썸네일 v3 적용 여부 재확인 → 해당 영상을 커뮤니티 탭 또는 Shorts 댓글에 크로스링크. 동시에 YouTube Studio '트래픽 소스 > 추천 영상' 탭에서 최근 28일 추천 유입 영상 목록 확인 후 유사 채널 벤치마킹.",
+        "estimated_roi": "롱폼 추천 노출 재개 시 주간 시청시간 +20~80시간 (30분 영상 기준 완주율 40% 가정, 주 100~400회 재생 목표)",
+        "execution_time": "2~3시간",
+        "automatable": "N"
+      },
+      {
+        "priority": "P1",
+        "title": "Shorts → 롱폼 유입 퍼널 구축 — 검색 트래픽 전환율 제고",
+        "evidence": "현재 Shorts 3편이 전체 조회수 5회 중 5회를 차지(100%)하며 검색 유입이 유일한 소스. 그러나 Shorts 평균 시청시간이 0분으로 집계되어 완주 후 롱폼으로 연결되는 경로가 없음. 모바일 80% 유입자 대상으로 Shorts 완주 후 롱폼 클릭을 유도하는 구조가 전무한 상태.",
+        "action": "신규 Shorts 영상부터 최종 컷에 롱폼 썸네일 컷 3초 삽입 + 자막 '전체 믹스 링크 프로필에' 추가. 기존 상위 Shorts(56QoX1MXITE, hLmViQQ-AZs) 설명란에 연관 롱폼 URL 첫 줄 배치. Shorts 댓글 고정에 '🎵 Full Mix →[링크]' 형식으로 롱폼 유도 문구 작성.",
+        "estimated_roi": "Shorts→롱폼 전환율 5% 가정 시, Shorts 주 50회 재생 기준 롱폼 +2~3회 유입 → 시청시간 +1~1.5시간/주. 단기 효과는 작으나 Shorts 조회수 증가 시 레버리지 효과 발생.",
+        "execution_time": "1시간 (기존 영상 설명란 수정 30분 + 신규 Shorts 템플릿 수정 30분)",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P2",
+        "title": "PC·TV 시청자 유입 경로 발굴 — 검색 키워드 확장",
+        "evidence": "채널 컨텍스트상 핵심 시청자는 PC 49%·TV 11.5%이나, 이번 주 실제 유입은 모바일 80%·데스크탑 20%로 역전. BGM 장시간 청취 행동(=시청시간 기여도 높음)은 PC/TV 사용자에서 발생하는데 해당 층의 유입이 없어 시청시간이 0으로 집계되는 구조적 원인일 수 있음.",
+        "action": "YouTube 검색에서 'city pop bgm work', 'lofi city pop study', 'japanese city pop playlist 1 hour' 등 PC/TV 사용 맥락 키워드를 영상 제목·태그에 추가 테스트. Google Trends에서 해당 키워드 디바이스별 검색 비중 확인 후 상위 2개 키워드를 다음 롱폼 신규 업로드 제목에 우선 적용.",
+        "estimated_roi": "PC 유입 비중 10%p 개선 시 평균 시청시간 증가(PC 사용자 BGM 청취 평균 15~30분 가정) → 주간 시청시간 +5~15시간 점진적 기여",
+        "execution_time": "1시간",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "롱폼 트래픽 소스별 조회수 — 특히 'Browse Features(홈 추천)' 및 'Suggested Videos' 유입 수치가 0에서 변화하는지 여부 (알고리즘 재진입 신호 확인)",
+      "롱폼 estimatedMinutesWatched — 현재 0분에서 벗어나는지 여부 (YPP 3,000시간 달성 가능성 판단의 핵심 선행 지표)"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/28",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/29",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/30"
+  ]
+}
