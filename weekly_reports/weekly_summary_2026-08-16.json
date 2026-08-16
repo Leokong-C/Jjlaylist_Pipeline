@@ -1,0 +1,68 @@
+{
+  "period": "2026-08-09 ~ 2026-08-16",
+  "current_kpi": {
+    "views": 5,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 8,
+    "subscribersGained": 1,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 8,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 4,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "이번 주(8/9~8/16) 총 조회수는 5회로 전주 8회 대비 37.5% 감소했으나, 구독자 1명 순증(전주 0명)과 평균 시청 지속시간 4초→8초 2배 향상이라는 질적 개선이 동반되었다. 추정 시청시간이 두 기간 모두 API 반환값 0분(실제 수분 내외 추정)으로, YPP 3,000시간 목표 달성까지 사실상 초기 단계임을 재확인한다. 트래픽 유입의 60%(3뷰)가 Shorts 피드에서 발생하고 검색이 40%(2뷰)를 차지하며, TV·외부링크 유입은 전무해 현재 채널 노출이 모바일 Shorts 생태계에 전적으로 의존하고 있다. v3 썸네일 복원(6/7~) 이후 롱폼 대표 영상(bKKitQ85z0Y)이 이번 주 최다 조회(2뷰)를 기록한 점은 긍정적 신호이나, 아직 통계적으로 유의미한 회복을 논하기엔 표본이 절대적으로 부족하다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "추정 시청시간이 두 주 연속 0분(API 집계)으로, 롱폼 영상의 실제 누적 시청시간이 YPP 3,000시간 목표 대비 사실상 정체 상태다. 현 주간 성장률(~5뷰/주)을 유지할 경우 YPP 시청시간 달성까지 수년이 소요될 수 있으며, 채널 알고리즘 노출 자체가 극히 제한된 상태로 즉각적인 배포 전략 수정이 필요하다."
+      },
+      {
+        "severity": "medium",
+        "description": "Shorts 영상(#33, #34)이 각각 2뷰·1뷰를 기록했지만 평균 시청 지속시간이 0초로 집계되어, Shorts 피드 유입 후 즉시 스와이프아웃이 발생하고 있을 가능성이 높다. Shorts→롱폼 전환 유도 효과가 없는 상태이며 후크(첫 1~2초) 전략을 재검토해야 한다."
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "Shorts 첫 2초 후크 리디자인으로 시청 완료율 및 롱폼 유입 전환율 확보",
+        "evidence": "Shorts 트래픽이 전체 유입의 60%(3뷰)를 차지하지만 해당 Shorts 영상들의 평균 시청 지속시간이 0초로, 첫 장면에서 이탈이 집중되고 있다. Shorts→롱폼 클릭은 0건으로 확인된다.",
+        "action": "현행 Shorts 오프닝을 정적 시티팝 비주얼+음악 페이드인 구조에서 '가장 임팩트 있는 멜로디 클라이맥스 구간 즉시 시작 + 화면 하단 자막(이 곡 전곡 듣기 ↓)' 구조로 교체한다. 다음 업로드 6개 중 3개를 새 후크 버전으로 A/B 테스트 운영한다.",
+        "estimated_roi": "Shorts 평균 시청률 10%→40% 개선 시 알고리즘 배포 확대로 주간 Shorts 유입 3뷰→30뷰 이상, 롱폼 클릭 전환 5% 가정 시 시청시간 +15~30h/주 추정",
+        "execution_time": "영상 1개당 약 30분, 6개 배치 적용 시 3시간",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P1",
+        "title": "YT_SEARCH 유입(2뷰) 키워드 분석 후 롱폼 제목·태그 SEO 최적화",
+        "evidence": "검색 유입이 2뷰(40%)로 Shorts 다음 2위 트래픽 소스이며, 채널 외부 노출 경로 중 유일하게 롱폼 시청 가능성이 있는 유입원이다. 현재 롱폼 제목에 '#Citypop' 해시태그가 포함되어 있으나 'lofi', 'study music', 'BGM', 'chill' 등 검색량 높은 복합 키워드가 제목 앞단에 부재하다.",
+        "action": "YouTube Studio 검색어 보고서에서 유입 발생 키워드를 확인하고, 롱폼 상위 5개 영상의 제목을 '[City Pop Lofi BGM] 도쿄 밤 시티팝 믹스 | Study・Chill・작업용' 패턴으로 리라이팅한다. 설명란 첫 3줄에 타겟 키워드를 자연스럽게 삽입하고 태그 15개를 재설정한다.",
+        "estimated_roi": "검색 노출 개선으로 주간 검색 유입 2뷰→10~20뷰 목표, 롱폼 30분 영상 기준 평균 8분 시청 유지 시 시청시간 +80~160min/주",
+        "execution_time": "키워드 조사 1시간 + 영상 5개 메타데이터 수정 1시간, 총 2시간",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P2",
+        "title": "PC·TV 시청자 타겟 롱폼 업로드 최적 시간대 설정으로 고시청시간 세션 유도",
+        "evidence": "채널 컨텍스트상 PC 49%·TV 11.5%가 핵심 BGM 청취 기기이나, 이번 주 디바이스 데이터에서 TV 0뷰·모바일 5뷰로 목표 시청자층(PC/TV)의 유입이 전무하다. BGM 청취 세션은 평균 시청 지속시간이 길어 시청시간 누적에 직접 기여하는데, 현재 알고리즘 노출이 모바일 Shorts 중심으로만 형성되어 롱폼 노출 기회를 놓치고 있다.",
+        "action": "롱폼 업로드 시간을 PC·TV 이용이 집중되는 평일 저녁 21~23시(KST) 또는 주말 오전 10~12시로 고정 스케줄링한다. 업로드 후 첫 24~48시간 내 커뮤니티 탭(탭 활성화 시) 또는 Shorts 설명란에 롱폼 링크를 교차 삽입하여 PC 유입을 유도한다.",
+        "estimated_roi": "PC/TV 유입 1세션 확보 시 평균 20~30분 시청 기대, 주간 5세션 확보 목표 시 시청시간 +100~150min/주",
+        "execution_time": "업로드 스케줄 변경 설정 30분, 이후 자동 적용",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "Shorts 평균 시청 지속시간(초 단위): 현재 0초에서 개선 여부 확인 — 후크 리디자인 효과의 선행 지표이자 알고리즘 배포 확대의 핵심 트리거",
+      "롱폼 estimatedMinutesWatched(분): 현재 사실상 0분에서의 절대적 증가량 추적 — YPP 3,000시간 목표 진척도의 유일한 실질 지표"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/31",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/32",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/33"
+  ]
+}
