@@ -1,0 +1,68 @@
+{
+  "period": "2026-08-16 ~ 2026-08-23",
+  "current_kpi": {
+    "views": 0,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 0,
+    "subscribersGained": 0,
+    "subscribersLost": 1
+  },
+  "previous_kpi": {
+    "views": 7,
+    "estimatedMinutesWatched": 2,
+    "averageViewDuration": 39,
+    "subscribersGained": 1,
+    "subscribersLost": 1
+  },
+  "analysis": {
+    "trend_diagnosis": "분석 기간(2026-08-16~23) 전체 조회수·시청시간·구독자 획득이 모두 0으로 집계되어 채널이 사실상 완전 정지 상태입니다. 전주(조회수 7, 시청시간 2분)가 이미 극저조였음을 감안하면 이는 단순 성과 하락이 아니라 노출 자체가 차단되거나 알고리즘 색인에서 이탈했을 가능성을 시사합니다. 유일하게 기록된 데이터는 구독자 이탈 1명으로, 채널에 신규 유입 없이 기존 구독자만 이탈하는 '소멸 국면'에 진입했습니다. v5.1 썸네일 변경으로 CTR이 0.9%까지 추락한 5월 이후 회복 시도(6/7 v3 복원)가 약 10주 경과했음에도 지표 반등이 없다는 점은, 썸네일 외 구조적 요인(업로드 공백, 메타데이터 품질, 채널 활동 신호 부재)이 복합 작용하고 있음을 강력히 시사합니다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "2주 연속 조회수 사실상 0(전주 7 → 금주 0): YouTube 알고리즘이 채널을 비활성으로 분류해 노출 배분을 중단했을 가능성이 높습니다. YouTube Studio의 '노출수(Impressions)' 원시 지표를 즉시 확인하여 노출 자체가 0인지 검증 필요. 노출이 0이라면 채널 품질 경고 또는 콘텐츠 정책 제한 여부도 점검해야 합니다."
+      },
+      {
+        "severity": "high",
+        "description": "구독자 순감(-1) 상태에서 신규 유입 완전 부재: YPP 목표(500구독자·3000시청시간)와의 격차가 좁혀지지 않고 오히려 벌어지고 있습니다. 현재 업로드 주기·빈도 데이터가 없으나, 일일 6개 v3 썸네일 자동화가 실제 신규 영상 업로드를 동반하지 않는다면 알고리즘 활성화 신호 자체가 생성되지 않을 수 있습니다."
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "신규 롱폼 영상 즉시 업로드로 채널 활성화 신호 재생성",
+        "evidence": "금주 조회수 0·노출 추정 0·트래픽 소스 전무. 알고리즘은 최근 업로드 활동을 채널 활성도 신호로 사용하며, 업로드 공백이 길수록 신규 영상에도 초기 노출을 줄이는 경향이 있습니다. 전주 7 → 금주 0으로의 완전 소멸은 활동 신호 부재가 가장 유력한 원인입니다.",
+        "action": "30~36분 시티팝 믹스 롱폼 1편을 48시간 내 업로드. v3 썸네일 즉시 적용, 제목에 '2026 City Pop Mix', 'BGM', 'Study'·'Late Night' 등 검색 수요 키워드 포함. 설명란에 타임스탬프와 분위기 태그 10개 이상 삽입. 업로드 직후 커뮤니티 탭 또는 Shorts로 신작 알림 게시.",
+        "estimated_roi": "업로드 후 72시간 내 노출 재개 시 주간 조회수 50~150회·시청시간 25~75시간 회복 기대(롱폼 30분 기준 AVD 50% 가정)",
+        "execution_time": "2~4시간(기존 자동화 파이프라인 활용 시 30분)",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P1",
+        "title": "YouTube Studio 노출수(Impressions) 직접 점검으로 CTR 회복 여부 확인",
+        "evidence": "v3 썸네일 복원(6/7) 후 약 10주 경과했음에도 조회수 회복 없음. CTR 0.9% 하락의 원인이 썸네일인지 노출 자체 감소인지 구분되지 않으면 잘못된 처방이 반복됩니다. 현재 API 데이터에 Impressions 수치가 없어 실제 CTR 계산 불가 상태.",
+        "action": "YouTube Studio → 분석 → 도달범위 탭에서 최근 28일 노출수·CTR 원시값 확인. 노출수가 주당 500 미만이면 CTR보다 노출 확대가 우선과제. CTR이 2% 미만이면 v3 썸네일의 A/B 변형(텍스트 크기·색상 대비) 2종 추가 테스트 설계.",
+        "estimated_roi": "CTR 2%→4% 개선 시 동일 노출 대비 조회수 2배·시청시간 2배 기대",
+        "execution_time": "30분(데이터 확인) + 2시간(썸네일 변형 제작 시)",
+        "automatable": "N"
+      },
+      {
+        "priority": "P1",
+        "title": "60초 Shorts 주 3회 업로드로 검색·알고리즘 피드 노출 채널 다각화",
+        "evidence": "롱폼 조회수 0 상황에서 Shorts는 별도 피드(Shorts 탭)를 통해 구독자 무관 노출이 가능한 유일한 단기 트래픽 경로입니다. 현재 트래픽 소스가 NO_LINK_OTHER 하나뿐으로 검색·추천 등 주요 소스가 전무, 노출 채널 다양화가 시급합니다. BGM 시청자(PC 49%·TV 11.5%)를 위한 '분위기 미리보기' 형식 Shorts는 롱폼 유입 깔때기로도 기능합니다.",
+        "action": "기존 롱폼 하이라이트 구간(가장 분위기 있는 60초)을 세로 크롭 + 가사/분위기 자막 오버레이로 Shorts 제작. 주 3편(월·수·금) 스케줄 자동화. 설명에 롱폼 링크 삽입 및 '전곡 듣기' CTA 텍스트 추가.",
+        "estimated_roi": "Shorts 편당 노출 500~2,000회 가정 시 주간 롱폼 클릭 유입 10~40회·시청시간 5~20시간 추가 기대",
+        "execution_time": "편당 20~30분, 주 3편 기준 1~1.5시간(자동화 구축 후 15분/편)",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "노출수(Impressions) 주간 합계: 0에서 벗어나 신규 업로드 후 최소 500 이상 회복 여부 확인 — 이것이 0이면 썸네일·CTR 개선보다 업로드 빈도·메타데이터 품질을 먼저 수정해야 함",
+      "롱폼 평균 시청 지속 시간(AVD) 절대값: 조회수 회복 시 AVD가 30분 영상 기준 50%(15분) 이상인지 확인 — 시청시간 3000시간 목표 달성 속도의 핵심 레버"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/34",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/35",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/36"
+  ]
+}
