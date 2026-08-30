@@ -286,5 +286,29 @@
       "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/35",
       "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/36"
     ]
+  },
+  {
+    "run_at": "2026-08-30T04:34:06.599404+00:00",
+    "period": "2026-08-23 ~ 2026-08-30",
+    "current_kpi": {
+      "views": 10,
+      "estimatedMinutesWatched": 10,
+      "averageViewDuration": 63,
+      "subscribersGained": 0,
+      "subscribersLost": 0
+    },
+    "previous_kpi": {
+      "views": 6,
+      "estimatedMinutesWatched": 1,
+      "averageViewDuration": 12,
+      "subscribersGained": 0,
+      "subscribersLost": 1
+    },
+    "opportunities_count": 3,
+    "issue_urls": [
+      "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/37",
+      "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/38",
+      "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/39"
+    ]
   }
 ]
