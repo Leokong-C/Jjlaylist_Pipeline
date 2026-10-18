@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html><body style="font-family:-apple-system,'Segoe UI',sans-serif;color:#333;max-width:680px;margin:0 auto;padding:20px;">
+
+<h1 style="border-bottom:3px solid #0366d6;padding-bottom:8px;">
+  📊 J_Jlaylist 주간 분석
+</h1>
+<div style="color:#666;font-size:14px;margin-bottom:24px;">
+  기간: 2026-10-11 ~ 2026-10-18
+</div>
+
+<h2>🎯 핵심 KPI</h2>
+<table style="width:100%;border-collapse:collapse;">
+  <tr style="background:#f5f5f5;">
+    <th style="padding:8px;text-align:left;">지표</th>
+    <th style="padding:8px;text-align:right;">현재</th>
+    <th style="padding:8px;text-align:right;">변화</th>
+  </tr>
+  <tr><td style="padding:8px;border-bottom:1px solid #eee;">조회수</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;">5</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;color:#d32f2f">-54.5%</td></tr>
+  <tr><td style="padding:8px;border-bottom:1px solid #eee;">시청시간(분)</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;">0</td>
+      <td style="padding:8px;text-align:right;border-bottom:1px solid #eee;color:#d32f2f">-100.0%</td></tr>
+  <tr><td style="padding:8px;">구독자 순증</td>
+      <td style="padding:8px;text-align:right;">+0</td>
+      <td style="padding:8px;text-align:right;">-</td></tr>
+</table>
+
+<h2 style="margin-top:32px;">📈 트렌드 진단</h2>
+<div style="background:#f0f7ff;padding:16px;border-radius:6px;line-height:1.6;">
+  이번 주(10/11~10/18) 조회수는 5회로 전주 11회 대비 -54.5% 급감하였으며, 시청시간은 사실상 0분으로 전주 9분에서 완전히 붕괴되었습니다. 평균 시청 지속시간도 96초→25초로 -74% 하락하여 시청자가 영상을 거의 즉시 이탈하고 있음을 시사합니다. 특히 상위 4개 영상 중 2개(MK5LzvgRXhk, DHFGIy6Yk3E)의 averageViewDuration이 0으로 기록된 것은 클릭 후 즉각 이탈 패턴으로, v3 썸네일 복원(6/7 시작) 이후 CTR 회복 여부가 아직 데이터에 충분히 반영되지 않았거나 노출 자체가 극도로 낮은 상태임을 의미합니다. 유일한 긍정 신호는 검색(YT_SEARCH) 유입이 3/5회(60%)로 여전히 주요 진입 경로를 유지하고 있다는 점입니다.
+</div>
+
+<h2 style="margin-top:32px;">🔥 발견된 기회 3건</h2>
+<div style="color:#666;font-size:13px;margin-bottom:8px;">CEO 컨펌 필요 — 각 안건의 GitHub Issue에서 승인/거부/수정</div>
+
+        <div style="border-left:4px solid #d32f2f;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#d32f2f;">[P0]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">인트로 30초 후킹 긴급 개선 — 이탈률 회복으로 알고리즘 신뢰 재건</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> averageViewDuration 25초(전주 96초, -74%)이며 상위 영상 2개는 0초 기록. 36분 콘텐츠에서 25초 이탈은 첫 30초 내 청각적 임팩트 부재를 의미. 시티팝 BGM 채널 특성상 PC(49%)+TV(11.5%) 청취 환경에서 첫 멜로디 훅이 체류 결정적 역할을 함.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> 신규 업로드 영상의 인트로 구간을 기존 페이드인 방식 대신 ①가장 캐치한 멜로디 구간을 0~5초에 배치 ②5~15초 내 채널 아이덴티티 로고+타이틀 카드 표시 ③15~30초 내 '오늘 믹스 하이라이트 예고' 자막 삽입으로 재편집. 기존 업로드 영상 중 조회수 상위 2개(MK5LzvgRXhk, oGXWjnLHxng)는 YouTube Studio 영상 편집기로 인트로 카드만 교체 업데이트.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 평균 시청 지속시간 25초→3분 이상 회복 시 시청시간 +15~30h/주(동일 조회수 기준), 알고리즘 재추천 트리거 가능성</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 2~3시간/영상 (인트로 재편집 기준) · 자동화: N</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/58" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+        <div style="border-left:4px solid #f57c00;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#f57c00;">[P1]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">검색 유입 60% 레버리지 — SEO 최적화로 노출 극대화</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> 이번 주 트래픽 소스 중 YT_SEARCH가 3/5회(60%)로 압도적 1위. 채널 노출 자체가 극소인 상황에서 검색이 유일한 유기 진입 경로임을 확인. 현재 제목에 '#Citypop' 해시태그는 1개 영상에만 적용되어 있으며, '시티팝 믹스', '로파이', 'BGM' 등 한국어 검색어 최적화가 불균일함.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> ①모든 업로드 영상 제목에 '[시티팝 BGM]', '[로파이 믹스]' 등 한국어 핵심 검색어를 앞단 배치 ②설명란 첫 2줄에 '시티팝, city pop, lofi, 공부할 때 듣는 음악, 집중력, 잔잔한 음악' 등 10개 이상 롱테일 키워드 삽입 ③태그 15개 풀로 채우기(한국어+영어 혼용) — 이 작업을 신규 업로드 템플릿에 자동 포함시키는 스크립트 작성.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> 검색 노출 +50~100%, 주간 조회수 5→10~15회 목표, 시청시간 누적 가속</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 30분/영상 (기존 영상 소급 적용 포함 총 3~4시간) · 자동화: Y</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/59" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+        <div style="border-left:4px solid #1976d2;padding:16px;margin:12px 0;background:#fafafa;">
+          <div style="font-size:11px;font-weight:bold;color:#1976d2;">[P2]</div>
+          <div style="font-size:16px;font-weight:bold;margin:4px 0 8px;">Shorts 퍼널 활용 — 롱폼 시청시간 유입 브리지 구축</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>근거:</b> 현재 디바이스 분포: DESKTOP 2회, MOBILE 2회, TABLET 1회로 모바일 비중이 40%에 달함. 60초 Shorts 포맷이 이미 채널에 존재하나 이번 주 top_videos 데이터에 Shorts가 상위에 없어 활용도 저조 추정. Shorts는 알고리즘 노출 비용이 낮고 모바일 유저를 롱폼으로 유도하는 퍼널 역할 가능.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>제안:</b> ①기존 롱폼 믹스의 가장 캐치한 30~60초 구간을 Shorts로 클립 편집 후 '전체 믹스는 채널에서' 자막+링크 삽입 ②주 3회 Shorts 업로드 루틴화 ③Shorts 설명란에 롱폼 재생목록 링크 고정 — 자동화 파이프라인: 롱폼 렌더링 완료 후 FFmpeg로 하이라이트 구간 자동 클립 추출 스크립트 연동.</div>
+          <div style="font-size:13px;color:#444;margin:4px 0;"><b>예상 ROI:</b> Shorts 통한 채널 노출 +200~300%, 롱폼 유입 전환율 5% 가정 시 주간 시청시간 +5~10h 추가</div>
+          <div style="font-size:12px;color:#666;margin:4px 0;">⏱ 1시간/Shorts 클립 (자동화 구축 후 15분/개) · 자동화: Y</div>
+          <div style="margin-top:12px;"><a href="https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/60" style="display:inline-block;padding:8px 16px;background:#0366d6;color:white;text-decoration:none;border-radius:4px;font-size:13px;">컨펌하러 가기 →</a></div>
+        </div>
+        
+
+<h3 style='color:#d32f2f;'>⚠️ 위험 신호</h3><ul><li><b>[high]</b> averageViewDuration 25초 (전주 96초 대비 -74%): 36분짜리 시티팝 믹스에서 평균 25초 이탈은 사실상 썸네일·제목과 실제 콘텐츠 간 기대 불일치(Title-Content Mismatch) 또는 인트로 첫 30초 내 청각/시각 후킹 실패를 의미합니다. 조회수가 이미 극소인 상황에서 이탈률까지 급등하면 알고리즘이 이 채널의 콘텐츠를 '저품질'로 학습할 위험이 있으며, YPP 도달을 위한 시청시간 누적이 사실상 정지 상태입니다.</li><li><b>[medium]</b> 주간 조회수 5회·구독자 0명: YPP 목표(500구독자+3,000시간) 달성을 위한 현재 궤적이 완전히 이탈한 상태입니다. 현재 속도 기준 시청시간 0분/주가 지속될 경우 수학적으로 YPP 도달이 불가능하며, v3 썸네일 복원 효과가 2~3주 내 노출 증가로 이어지지 않는다면 콘텐츠 전략 자체의 전면 재검토가 필요합니다.</li></ul>
+
+<h2 style="margin-top:32px;">🌏 시청자 분포 (상위 5개국)</h2>
+<table style="width:100%;border-collapse:collapse;font-size:13px;">
+  <tr style="background:#f5f5f5;"><th style="padding:8px;text-align:left;">국가</th><th style="padding:8px;text-align:right;">조회수</th></tr>
+  
+</table>
+
+<h2 style="margin-top:32px;">📅 다음 주 측정 권장</h2>
+<div style="background:#fffde7;padding:12px;border-radius:6px;">
+  averageViewDuration (목표: 25초→180초 이상 회복 — 인트로 개선 효과 측정), YT_SEARCH 유입 조회수 (목표: 3→6회 이상 — SEO 최적화 및 v3 썸네일 CTR 회복 여부 확인)
+</div>
+
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid #eee;color:#999;font-size:12px;text-align:center;">
+  J_Jlaylist Weekly Analyzer v1 · 다음 보고: 일주일 후 일요일 09:00 KST<br>
+  전체 데이터는 첨부 JSON 또는 GitHub Actions 페이지에서 확인 가능
+</div>
+
+</body></html>
