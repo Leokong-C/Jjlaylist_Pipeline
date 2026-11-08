@@ -1,0 +1,68 @@
+{
+  "period": "2026-11-01 ~ 2026-11-08",
+  "current_kpi": {
+    "views": 9,
+    "estimatedMinutesWatched": 2,
+    "averageViewDuration": 47,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "previous_kpi": {
+    "views": 3,
+    "estimatedMinutesWatched": 0,
+    "averageViewDuration": 6,
+    "subscribersGained": 0,
+    "subscribersLost": 0
+  },
+  "analysis": {
+    "trend_diagnosis": "이번 주 조회수 9회(전주 3회 대비 +200%)로 외형상 급등했으나, 시청시간은 고작 2분에 불과해 실질적 체류가 거의 없는 '공허한 성장'에 해당한다. 7개 영상이 분산 노출되며 평균 조회수가 1.3회/영상에 그쳐 알고리즘이 아직 특정 영상을 선택(pick)하지 못한 상태다. 트래픽의 78%(7/9)가 YT_SEARCH에서 발생했으나 검색 유입에서 시청시간이 0분으로 집계된 점은 썸네일·제목으로 클릭은 유도하지만 콘텐츠 첫 30초에서 대거 이탈하고 있음을 강하게 시사한다. v3 썸네일 복원(6/7)이 아직 본격 반영되지 않은 초기 단계로, CTR 회복 여부는 향후 2주가 관건이다. 구독자 증감이 0으로 고정된 상태는 YPP(500구독) 달성 궤도가 사실상 정체임을 의미한다.",
+    "risk_signals": [
+      {
+        "severity": "high",
+        "description": "YT_SEARCH 7뷰 → 시청시간 0분: 검색 유입 직후 거의 즉시 이탈 중. 36분 롱폼 영상의 오프닝 15~30초 훅(hook) 부재 가능성 높음. 현재 평균 시청 지속시간 47초는 콘텐츠 길이(평균 34분) 대비 약 2.3% 수준으로, 알고리즘이 이 채널을 '저품질 체류' 채널로 학습할 위험이 있음."
+      },
+      {
+        "severity": "medium",
+        "description": "모바일 비중 56%(5/9뷰)가 시청시간 2분 전부를 차지하고, 데스크탑 4뷰는 시청시간 0분. BGM 채널 특성상 PC·TV 시청자가 핵심인데 정작 그 기기에서 이탈률이 100%에 가깝다는 역설적 상황으로, 썸네일·제목이 PC 탐색 의도와 미스매치될 가능성 있음."
+      }
+    ],
+    "opportunities": [
+      {
+        "priority": "P0",
+        "title": "오프닝 15초 훅 삽입으로 검색 이탈률 즉시 차단",
+        "evidence": "YT_SEARCH 7뷰 중 추정 시청시간 ~0분. averageViewDuration 최고값이 DHFGIy6Yk3E의 105초(1뷰)이며 나머지 6영상은 0~32초. 검색에서 클릭은 발생하나 체류 전환 실패가 명확한 패턴.",
+        "action": "신규 업로드 영상부터 오프닝 0~15초에 '분위기 하이라이트 클립(가장 감성적인 15초 장면) + 자막 텍스트(오늘 밤, 도쿄의 밤을 함께 달립니다)' 형태의 훅을 추가. 기존 영상 중 조회수 상위 3개(MK5LzvgRXhk 등)는 YouTube Studio 편집기로 인트로 카드 추가 또는 설명란에 타임스탬프 0:00 훅 문구 삽입으로 보완.",
+        "estimated_roi": "평균 시청 지속시간 47초 → 목표 3분 이상 달성 시 주간 시청시간 약 +20~30분/주 (현재 2분 기준 10~15배 개선). 알고리즘 추천 임계치 진입 가속.",
+        "execution_time": "신규 영상 편집 추가: 15분/영상, 기존 영상 설명 수정: 5분/영상",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P1",
+        "title": "검색 유입 7뷰 기반 키워드 집중 → 제목·태그 A/B 최적화",
+        "evidence": "전체 트래픽 78%가 YT_SEARCH. '도쿄 나이트 드라이브', '시티팝', '로파이' 키워드가 반복 등장하며 MK5LzvgRXhk(TOKYO NIGHT DRIVE #32)가 3뷰로 1위. 검색 수요는 존재하나 롱테일 키워드 활용이 미흡할 가능성.",
+        "action": "YouTube Search 유입 상위 쿼리를 Studio 검색어 보고서에서 확인 후, 조회수 1위 영상(MK5LzvgRXhk) 제목에 '자기 전 듣는', '수면 음악', 'BGM 공부' 등 롱테일 키워드 추가 테스트. 태그에 일본어 표기(シティポップ, ドライブ BGM) 병행 추가.",
+        "estimated_roi": "검색 유입 7뷰 → 목표 25~30뷰/주 (약 3~4배). 시청시간 개선과 병행 시 주간 시청시간 +60~90분 추정.",
+        "execution_time": "30분 (키워드 리서치 20분 + 제목·태그 수정 10분)",
+        "automatable": "Y"
+      },
+      {
+        "priority": "P2",
+        "title": "DHFGIy6Yk3E('혼자인 밤' 시리즈) 단독 성과 분석 → 시리즈 확장",
+        "evidence": "1뷰임에도 평균 시청 지속시간 105초로 유일하게 의미 있는 체류 발생. 다른 6개 영상 평균 AVD 6~32초 대비 3~17배 높음. '혼자인 밤', '고요한' 등 감성 키워드가 클릭 후 체류 의도와 매칭된 것으로 추정.",
+        "action": "해당 영상의 제목 구조('감성 상황 묘사 + 장르 설명')를 템플릿화하여 신규 영상 5편에 적용. 예: '[Playlist] 혼자인 주말 오후의 시티팝 🍵 | 카페 로파이 믹스'. 썸네일도 해당 영상 스타일(v3) 기준으로 통일.",
+        "estimated_roi": "AVD 105초 패턴 영상 5편 추가 시 주간 시청시간 +10~15분 추가 기여. 중장기 YPP 3,000시간 달성 궤도 개선.",
+        "execution_time": "제목 템플릿 설계 20분 + 영상 5편 메타데이터 적용 25분 = 약 45분",
+        "automatable": "Y"
+      }
+    ],
+    "next_week_kpi_focus": [
+      "averageViewDuration (목표: 전체 평균 90초 이상 — v3 썸네일 복원 + 오프닝 훅 효과 검증 핵심 지표)",
+      "YT_SEARCH 유입 시청시간 (현재 0분 → 5분 이상 — 검색 클릭 후 체류 전환 여부로 알고리즘 진입 가능성 조기 판단)"
+    ]
+  },
+  "issue_urls": [
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/67",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/68",
+    "https://github.com/Leokong-C/Jjlaylist_Pipeline/issues/69"
+  ]
+}
