@@ -1,8 +1,10 @@
 name: Studio Release Publish (J_Jlaylist)
 
-# 준비된 릴리스(음원 + 커버 + plan.json)를 렌더하고 @J_Jlaylist 채널에 예약 업로드
-# - studio/releases/** 를 push하면 즉시 실행
-# - 매일 1회 실행: 하루 한도(6개)로 못 올린 쇼츠를 이어서 업로드
+# 흐름: prepare(렌더 + Slack 승인 요청) → [사람 승인] → publish(@J_Jlaylist 예약 업로드)
+# - 새 릴리스: Slack 알림 → '검토 · 승인하기' → GitHub에서 Approve 해야 업로드
+# - 이미 승인된 릴리스의 남은 쇼츠: 승인 없이 매일 이어서 업로드
+# 필요 설정(1회): Settings → Environments → youtube-publish (Required reviewers: 본인)
+#                 Secrets → SLACK_WEBHOOK_URL
 on:
   push:
     branches: [main]
@@ -29,27 +31,72 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
+  prepare:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
+    outputs:
+      needs_approval: ${{ steps.p.outputs.needs_approval }}
+      approved_pending: ${{ steps.p.outputs.approved_pending }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install FFmpeg + Korean font
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq ffmpeg fonts-noto-cjk
-
       - name: Install Python deps
         run: pip install -r studio/requirements.txt
+      - name: Render + summarize
+        id: p
+        working-directory: studio
+        run: |
+          ARGS=""
+          if [ -n "${{ github.event.inputs.slug }}" ]; then ARGS="--slug ${{ github.event.inputs.slug }}"; fi
+          python autopublish.py --prepare $ARGS
+          python -c "import json;p=json.load(open('pending.json'));print('needs_approval='+str(p['needs_approval']).lower());print('approved_pending='+str(p['approved_pending']).lower())" >> $GITHUB_OUTPUT
+          cat pending.json
+      - name: Upload previews
+        if: steps.p.outputs.needs_approval == 'true' || steps.p.outputs.approved_pending == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio-preview
+          retention-days: 7
+          path: |
+            studio/releases/*/plan.json
+            studio/releases/*/video/
+            studio/releases/*/shorts/
+      - name: Slack approval request
+        if: steps.p.outputs.needs_approval == 'true'
+        working-directory: studio
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: python slack_notify.py request pending.json "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      - name: Render + publish
+  publish_approved_release:
+    needs: prepare
+    if: needs.prepare.outputs.needs_approval == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: youtube-publish
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python deps
+        run: pip install -r studio/requirements.txt
+      - name: Download rendered previews
+        uses: actions/download-artifact@v4
+        with:
+          name: studio-preview
+          path: studio/releases
+      - name: Publish to @J_Jlaylist
         id: run
         working-directory: studio
         env:
@@ -60,41 +107,70 @@ jobs:
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
           python autopublish.py $ARGS 2>&1 | tee publish.log
           exit ${PIPESTATUS[0]}
-
       - name: Commit upload log (plan.json)
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add studio/releases/*/plan.json 2>/dev/null || true
-          if git diff --cached --quiet; then
-            echo "변경 없음"
-          else
+          if git diff --cached --quiet; then echo "변경 없음"; else
             git commit -m "chore(studio): upload log $(date -u +%Y-%m-%d) [skip ci]"
             git pull --rebase && git push
           fi
-
-      - name: Result
+      - name: Slack result
         if: always()
-        id: res
+        working-directory: studio
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          R=$(grep '::RESULT::' studio/publish.log | tail -1 | sed 's/::RESULT:://')
-          echo "result=${R:-FAIL}" >> $GITHUB_OUTPUT
+          R=$(grep '::RESULT::' publish.log 2>/dev/null | tail -1 | sed 's/::RESULT:://')
+          python slack_notify.py result "${R:-FAIL}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-      - name: Email
-        if: always() && steps.res.outputs.result != 'NOTHING_TO_DO'
-        uses: dawidd6/action-send-mail@v3
+  publish_remaining_shorts:
+    needs: prepare
+    if: needs.prepare.outputs.needs_approval != 'true' && needs.prepare.outputs.approved_pending == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "[J_Jlaylist Studio] 업로드 결과 - ${{ steps.res.outputs.result }}"
-          to: ${{ secrets.MAIL_TO }}
-          from: J_Jlaylist Studio <${{ secrets.MAIL_USERNAME }}>
-          body: |
-            결과: ${{ steps.res.outputs.result }}
-            모든 영상은 '비공개 + 예약 공개' 상태로 올라갑니다. 공개 전 YouTube Studio에서 확인하세요.
-            로그: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          attachments: studio/publish.log
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python deps
+        run: pip install -r studio/requirements.txt
+      - name: Download rendered previews
+        uses: actions/download-artifact@v4
+        with:
+          name: studio-preview
+          path: studio/releases
+      - name: Publish to @J_Jlaylist
+        id: run
+        working-directory: studio
+        env:
+          TOKEN_PICKLE_B64: ${{ secrets.TOKEN_PICKLE_B64 }}
+        run: |
+          ARGS="--approved-only"
+          if [ -n "${{ github.event.inputs.slug }}" ]; then ARGS="$ARGS --slug ${{ github.event.inputs.slug }}"; fi
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          python autopublish.py $ARGS 2>&1 | tee publish.log
+          exit ${PIPESTATUS[0]}
+      - name: Commit upload log (plan.json)
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add studio/releases/*/plan.json 2>/dev/null || true
+          if git diff --cached --quiet; then echo "변경 없음"; else
+            git commit -m "chore(studio): upload log $(date -u +%Y-%m-%d) [skip ci]"
+            git pull --rebase && git push
+          fi
+      - name: Slack result
+        if: always()
+        working-directory: studio
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          R=$(grep '::RESULT::' publish.log 2>/dev/null | tail -1 | sed 's/::RESULT:://')
+          python slack_notify.py result "${R:-FAIL}" "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
