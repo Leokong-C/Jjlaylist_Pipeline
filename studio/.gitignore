@@ -4,3 +4,5 @@ inbox/
 releases/*/video/
 releases/*/shorts/
 __pycache__/
+pending.json
+publish.log
