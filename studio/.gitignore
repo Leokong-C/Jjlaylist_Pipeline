@@ -1,0 +1,6 @@
+.env
+voice.json.bak
+inbox/
+releases/*/video/
+releases/*/shorts/
+__pycache__/

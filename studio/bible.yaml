@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────────
+# bible.yaml — 세계관 설정서 (이 파일만 사람이 직접 씁니다)
+# 모든 기획·가사·프롬프트·메타데이터는 여기서 파생됩니다.
+# 아래 값은 예시입니다. 전부 본인 콘셉트로 바꾸세요.
+# ─────────────────────────────────────────────────────────────
+project:
+  name: "새벽연구소"                 # 밴드/아티스트 프로젝트명 (가칭)
+  name_en: "Dawn Laboratory"
+  one_liner: "실험이 끝난 새벽, 연구실 불을 끄며 부르는 노래"
+  ai_disclosure: "작사·기획·프로듀싱은 사람이, 보컬은 프로듀서 본인 목소리를 Mureka 보컬 레퍼런스로 등록해 생성합니다."
+
+vocal:
+  source: "mureka_vocal"            # 본인 목소리 (voice.json의 vocal_id)
+  character: "프로듀서 본인 = 보컬. 가상 캐릭터 대신 '얼굴 없는 연구원' 페르소나"
+  delivery_tags: ["[Soft]", "[Whispered]"]   # 곡 성격에 따라 Claude가 선택
+
+sound:
+  genre: "Korean indie rock / emo ballad"
+  references_mood: ["밴드 사운드", "기타 아르페지오", "후렴에서 터지는 드럼"]
+  bpm_range: [78, 128]
+  avoid: ["EDM drop", "trap hi-hat", "autotune"]
+
+lyrics:
+  language: "ko"
+  themes: ["반복되는 실패와 재시도", "새벽의 고요", "작은 성취", "버티는 청춘"]
+  motifs: ["형광등", "피펫", "원심분리기 소리", "새벽 4시", "식은 커피"]
+  title_style: "문장형 한국어 제목 (예: '오늘도 결과는 음성이었지만')"
+  rules:
+    - "구체적인 장소·사물·시간을 넣는다"
+    - "흔한 영어 후렴 반복 금지"
+    - "섹션 태그 [Verse] [Pre-Chorus] [Chorus] [Bridge] [Outro] 사용"
+
+visual:
+  palette: ["딥 네이비", "형광 민트", "따뜻한 백열등 오렌지"]
+  recurring_scene: "불 꺼진 실험실 창가, 새벽 하늘"
+  style: "필름 그레인, 애니메이션 배경화풍, 인물 얼굴 비노출"
+
+release:
+  format: "EP"                      # EP(5곡) / single(1~3곡) / album(7곡)
+  tracks_per_release: 5
+  youtube_title_format: "[FULL ALBUM] {project} - {album}"
